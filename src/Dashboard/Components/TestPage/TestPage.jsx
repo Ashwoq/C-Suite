@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import testData from "../Assets/Data/TestData.json";
+import axios from "axios";
 import "./TestPage.css";
 
 const TestPage = () => {
@@ -15,16 +15,26 @@ const TestPage = () => {
   const [countdown, setCountdown] = useState(5);
 
   useEffect(() => {
-    const lessonTest = testData.courses[0].lessons.find(
-      (lesson) => lesson.lessonId === parseInt(lessonId)
-    );
+    const fetchTestData = async () => {
+      try {
+        const response = await axios.get(
+          `https://csuite-production.up.railway.app/api/tests/${lessonId}`
+        );
+        // https://csuite-production.up.railway.app/api/tests
+        const lessonTest = response.data;
+        if (lessonTest && lessonTest.isTestAvailable) {
+          setQuestions(lessonTest.questions);
+          setTimeLimit(lessonTest.timeLimit);
+        } else {
+          // navigate(-1);
+        }
+      } catch (error) {
+        console.error("Error fetching test data:", error);
+        // navigate(-1);
+      }
+    };
 
-    if (lessonTest && lessonTest.isTestAvailable) {
-      setQuestions(lessonTest.questions);
-      setTimeLimit(lessonTest.timeLimit);
-    } else {
-      // navigate(-1);
-    }
+    fetchTestData();
   }, [lessonId, navigate]);
 
   useEffect(() => {
@@ -85,7 +95,7 @@ const TestPage = () => {
     <div className="testPage">
       <div className="testPageHeader">
         <div>
-          <h3>{testData.courses[0].title}</h3>
+          <h3>{questions.length > 0 ? questions[0].courseTitle : "Test"}</h3>
           <h4>Lesson {lessonId}</h4>
         </div>
         <div>
@@ -141,7 +151,6 @@ const TestPage = () => {
               </div>
               <form onSubmit={handleSubmit} className="testPageRHS">
                 <div className="testPageQuestionContainer">
-                  {/* <p>{questions[currentQuestionIndex].question}</p> */}
                   <div className="testPageTotalQuestion testAnswerHere">
                     Answer here
                   </div>

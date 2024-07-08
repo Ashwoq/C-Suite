@@ -1,8 +1,8 @@
 import "./CourseDetails.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Tabs, Tab, Accordion } from "react-bootstrap";
-import courseContentDetailsData from "../Assets/Data/CourseContentDetails.json";
 import CourseRecommendation from "../CourseRecomend/CourseRecommendation";
 
 const CourseDetails = () => {
@@ -11,6 +11,22 @@ const CourseDetails = () => {
   const [activeTab, setActiveTab] = useState("description");
   const [activeLesson, setActiveLesson] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
+  const [courseContentDetailsData, setCourseContentDetailsData] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://csuite-production.up.railway.app/api/courseDetail"
+        );
+        setCourseContentDetailsData(response.data.courses[0]);
+      } catch (err) {
+        console.error("Error fetching course details:", err);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleLessonClick = (index) => {
     setActiveLesson(index === activeLesson ? "" : index);
@@ -69,31 +85,33 @@ const CourseDetails = () => {
           <div className="CDWhoIsThisFor">
             <h5>Who is this course for</h5>
             <div className="CDLightningBox">
-              {courseContentDetailsData.whoIsThisFor.map((item, index) => (
-                <div key={index}>
-                  <div className="CDLightningTxt">
-                    {item.text}
-                    <img
-                      className="CDLightningSVG"
-                      src={resolveSVGPath(item.icon)}
-                      alt={item.text}
-                    />
+              {courseContentDetailsData.whoIsThisFor &&
+                courseContentDetailsData.whoIsThisFor.map((item, index) => (
+                  <div key={index}>
+                    <div className="CDLightningTxt">
+                      {item.text}
+                      <img
+                        className="CDLightningSVG"
+                        src={resolveSVGPath(item.icon)}
+                        alt={item.text}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
           <div className="CDWhatYouGet">
             <h5>What you'll get out of this</h5>
-            {courseContentDetailsData.whatYouGet.map((item, index) => (
-              <div className="CDWhatBoxContent" key={index}>
-                <img src={resolveSVGPath(item.icon)} alt={item.title} />
-                <div>
-                  <div className="CDItemTitle">{item.title}</div>
-                  <span>{item.description}</span>
+            {courseContentDetailsData.whatYouGet &&
+              courseContentDetailsData.whatYouGet.map((item, index) => (
+                <div className="CDWhatBoxContent" key={index}>
+                  <img src={resolveSVGPath(item.icon)} alt={item.title} />
+                  <div>
+                    <div className="CDItemTitle">{item.title}</div>
+                    <span>{item.description}</span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
         <div className="CDMHS">
@@ -116,9 +134,12 @@ const CourseDetails = () => {
                   {isExpanded
                     ? courseContentDetailsData.description
                     : courseContentDetailsData.description
+                    ? courseContentDetailsData.description
                         .split("\n")
                         .slice(0, 1)
-                        .join(" ")}
+                        .join(" ")
+                    : ""}
+
                   {!isExpanded && (
                     <span
                       className="read-more-link text-primary"
@@ -152,20 +173,21 @@ const CourseDetails = () => {
                   }}
                   className="px-4"
                 >
-                  {courseContentDetailsData.overviewPoints.map(
-                    (point, index) => (
-                      <span
-                        key={index}
-                        className="overview-button px-3"
-                        style={{
-                          backgroundColor: "#f3e6ff",
-                          borderRadius: "20px",
-                        }}
-                      >
-                        {point.heading}
-                      </span>
-                    )
-                  )}
+                  {courseContentDetailsData.overviewPoints &&
+                    courseContentDetailsData.overviewPoints.map(
+                      (point, index) => (
+                        <span
+                          key={index}
+                          className="overview-button px-3"
+                          style={{
+                            backgroundColor: "#f3e6ff",
+                            borderRadius: "20px",
+                          }}
+                        >
+                          {point.heading}
+                        </span>
+                      )
+                    )}
                 </div>
                 <br />
                 <h2 className="px-4" style={{ fontSize: "20px" }}>
@@ -180,14 +202,16 @@ const CourseDetails = () => {
                   }}
                   className="px-4"
                 >
-                  {courseContentDetailsData.recommendedCourses.map(
-                    (course, index) => (
-                      <CourseRecommendation
-                        title={course.title}
-                        description={course.description}
-                      />
-                    )
-                  )}
+                  {courseContentDetailsData.recommendedCourses &&
+                    courseContentDetailsData.recommendedCourses.map(
+                      (course, index) => (
+                        <CourseRecommendation
+                          key={index}
+                          title={course.title}
+                          description={course.description}
+                        />
+                      )
+                    )}
                 </div>
               </Tab>
               <Tab eventKey="lessons" title="Lessons">
@@ -196,45 +220,50 @@ const CourseDetails = () => {
                     activeKey={activeLesson}
                     onSelect={handleLessonClick}
                   >
-                    {courseContentDetailsData.lessons.map((lesson, index) => (
-                      <Accordion.Item key={index} eventKey={index}>
-                        <Accordion.Header>
-                          <div className="CDlesson-meta">
-                            <div className="CDlesson-title">
-                              {index + 1}. {lesson.title}
+                    {courseContentDetailsData.lessons &&
+                      courseContentDetailsData.lessons.map((lesson, index) => (
+                        <Accordion.Item key={index} eventKey={index}>
+                          <Accordion.Header>
+                            <div className="CDlesson-meta">
+                              <div className="CDlesson-title">
+                                {index + 1}. {lesson.title}
+                              </div>
+                              <span className="CDlesson-duration">
+                                Duration:{" "}
+                                {convertToReadableDuration(
+                                  calculateTotalDuration(lesson.videos)
+                                )}
+                              </span>
+                              <span className="">
+                                &nbsp;/&nbsp; Total Videos:{" "}
+                                {lesson.videos.length}
+                              </span>
                             </div>
-                            <span className="CDlesson-duration">
-                              Duration:{" "}
-                              {convertToReadableDuration(
-                                calculateTotalDuration(lesson.videos)
-                              )}
-                            </span>
-                            <span className="">
-                              &nbsp;/&nbsp; Total Videos: {lesson.videos.length}
-                            </span>
-                          </div>
-                        </Accordion.Header>
-                        <Accordion.Body>
-                          <div>
-                            <ul className="list-group">
-                              {lesson.videos.map((video, vidIndex) => (
-                                <li key={vidIndex} className="list-group-item">
-                                  <span className="video-number">
-                                    <a href={video.link}>
-                                      {`${index + 1}.${vidIndex + 1}`}{" "}
-                                      {video.title}
-                                    </a>
-                                  </span>
-                                  <span className="lesson-duration">
-                                    Duration: {video.duration}
-                                  </span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </Accordion.Body>
-                      </Accordion.Item>
-                    ))}
+                          </Accordion.Header>
+                          <Accordion.Body>
+                            <div>
+                              <ul className="list-group">
+                                {lesson.videos.map((video, vidIndex) => (
+                                  <li
+                                    key={vidIndex}
+                                    className="list-group-item"
+                                  >
+                                    <span className="video-number">
+                                      <a href={video.link}>
+                                        {`${index + 1}.${vidIndex + 1}`}{" "}
+                                        {video.title}
+                                      </a>
+                                    </span>
+                                    <span className="lesson-duration">
+                                      Duration: {video.duration}
+                                    </span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </Accordion.Body>
+                        </Accordion.Item>
+                      ))}
                   </Accordion>
                 </div>
               </Tab>
@@ -243,12 +272,15 @@ const CourseDetails = () => {
                 title="Overview"
                 className="CDtabBoxOverV"
               >
-                {courseContentDetailsData.overviewPoints.map((point, index) => (
-                  <div key={index}>
-                    <h5>{point.heading}</h5>
-                    <p>{point.content}</p>
-                  </div>
-                ))}
+                {courseContentDetailsData.overviewPoints &&
+                  courseContentDetailsData.overviewPoints.map(
+                    (point, index) => (
+                      <div key={index}>
+                        <h5>{point.heading}</h5>
+                        <p>{point.content}</p>
+                      </div>
+                    )
+                  )}
               </Tab>
             </Tabs>
           </div>
@@ -264,7 +296,7 @@ const CourseDetails = () => {
             </div>
             <button className="CDCartBtn">Add to Cart</button>
             <button
-              onClick={() => navigate("/courseContent")}
+              onClick={() => navigate("/home/courseContent")}
               className="CDBuyBtn"
             >
               Buy Now
@@ -273,12 +305,13 @@ const CourseDetails = () => {
           <div className="CDCourseDetails">
             <h4>Course Details</h4>
             <div>
-              {courseContentDetailsData.courseDetails.map((detail, index) => (
-                <div key={index} className="CDCourseDetailRow">
-                  <span className="detailIcon">{detail.icon}</span>
-                  {detail.text}
-                </div>
-              ))}
+              {courseContentDetailsData.courseDetails &&
+                courseContentDetailsData.courseDetails.map((detail, index) => (
+                  <div key={index} className="CDCourseDetailRow">
+                    <span className="detailIcon">{detail.icon}</span>
+                    {detail.text}
+                  </div>
+                ))}
             </div>
           </div>
         </div>

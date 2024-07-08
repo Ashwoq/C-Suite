@@ -117,9 +117,7 @@ const CourseContent = () => {
             </div>
             <div>
               <div className="infoBox">
-                <h1 style={{ fontSize: "25px" }} className="my-2">
-                  {courseData.title}
-                </h1>
+                <h1 className="my-2">{courseData.title}</h1>
                 <div className="lessonDescriptionBox my-3">
                   <h3 className="lessonDescriptionBoxTitle my-2">
                     1. {courseData.lessons[0].title}
@@ -237,7 +235,7 @@ const CourseContent = () => {
             </Tabs>
           </div> */}
         </div>
-        <div className="col-md-4 hideClassForXS accordianBox">
+        <div className="col-md-4  accordianBox">
           <Accordion
             activeKey={activeLesson}
             onSelect={handleLessonClick}

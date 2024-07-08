@@ -61,17 +61,17 @@ function App() {
             <Route path="profile" index element={<Profile />}></Route>
             <Route path="enrolled" index element={<Enrolled />}></Route>
             <Route path="test/:lessonId" index element={<TestPage />} />
+            <Route
+              path="courseContent"
+              index
+              element={<CourseContent />}
+            ></Route>
+            <Route
+              path="courseDetails"
+              index
+              element={<CourseDetails />}
+            ></Route>
           </Route>
-          <Route
-            path="/courseContent"
-            index
-            element={<CourseContent />}
-          ></Route>
-          <Route
-            path="/courseDetails"
-            index
-            element={<CourseDetails />}
-          ></Route>
         </Routes>
       </Router>
     </div>

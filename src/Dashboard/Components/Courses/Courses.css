@@ -2,6 +2,41 @@
   padding: 0px 20px 20px 20px;
 }
 
+.filterChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.filterChip {
+  padding: 8px 16px;
+  border-radius: 20px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filterChip.active {
+  background-color: #6366f1;
+  color: white;
+}
+
+.clearFilters {
+  margin-left: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  color: white;
+  background-color: #ec2424;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.clearFilters:hover {
+  background-color: #d1d1d1;
+}
+
 /* Design 3 */
 .cardContainer3 {
   padding: 20px;
@@ -190,11 +225,20 @@
     padding: 8px 10px;
     font-size: 0.7em;
   }
+
+  .filterChip,
+  .clearFilters {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
 }
 
 @media (max-width: 835px) {
+  .cardContainer3 {
+    padding: 8px 2px;
+  }
   .courseContainer3 {
-    gap: 20px;
-    grid-template-columns: repeat(1, 1fr);
+    gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
