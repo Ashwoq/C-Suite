@@ -1,15 +1,82 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../Courses/Courses.css";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import coursesData from "../Assets/Data/CourseList.json";
+import LoadingPage from "../LoadingPage/LoadingPage";
+// import coursesData from "../Assets/Data/CourseList.json";
 
-const resolveImagePath = (relativePath) => {
-  return require(`../Assets/Images/${relativePath}`);
-};
-
-const Courses = () => {
+const Enrolled = () => {
   const navigate = useNavigate();
   const [selectedFilters, setSelectedFilters] = useState([]);
+  const [coursesData, setCoursesData] = useState([]);
+  const [coursePurchasedTitle, setCoursePurchasedTitle] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       // Fetch all courses
+  //       const response = await axios.get(
+  //         "https://csuite-production.up.railway.app/api/courseList"
+  //       );
+  //       const allCourses = response.data.courses;
+
+  //       // Fetch coursePurchasedTitle
+  //       const responseUser = await axios.get(
+  //         "https://csuite-production.up.railway.app/api/user"
+  //       );
+  //       const purchasedTitle = responseUser.data.users[0].coursePurchased;
+  //       setCoursePurchasedTitle(purchasedTitle);
+
+  //       // Filter courses based on purchased titles
+  //       const filteredCourses = allCourses.filter((course) =>
+  //         purchasedTitle.includes(course.title)
+  //       );
+  //       setCoursesData(filteredCourses);
+
+  //       setIsLoading(false);
+  //     } catch (err) {
+  //       console.log(err);
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
+  //
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [coursesResponse, userResponse] = await Promise.all([
+          axios.get("https://csuite-production.up.railway.app/api/courseList"),
+          axios.get("https://csuite-production.up.railway.app/api/user"),
+        ]);
+
+        const allCourses = coursesResponse.data.courses;
+        const purchasedTitles = userResponse.data.users[0].coursePurchased;
+
+        setCoursePurchasedTitle(purchasedTitles);
+
+        const filteredCourses = allCourses.filter((course) =>
+          purchasedTitles.includes(course.title)
+        );
+
+        setCoursesData(filteredCourses);
+        setIsLoading(false);
+      } catch (error) {
+        alert("Failed to fetch data. Please try again later.");
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const resolveImagePath = (relativePath) => {
+    return require(`../Assets/Images/${relativePath}`);
+  };
 
   const getAllLessons = () => {
     let lessons = [];
@@ -35,7 +102,6 @@ const Courses = () => {
     }
   };
 
-  // Handle click on a filter chip
   const handleFilterClick = (filter) => {
     if (selectedFilters.includes(filter)) {
       setSelectedFilters(selectedFilters.filter((f) => f !== filter));
@@ -44,16 +110,23 @@ const Courses = () => {
     }
   };
 
-  // Clear all filters
   const clearFilters = () => {
     setSelectedFilters([]);
   };
+
+  if (isLoading) {
+    return (
+      <div>
+        <LoadingPage />
+      </div>
+    );
+  }
 
   return (
     <>
       <div className="main-content">
         <div className="cardContainer3">
-          <h2>Enrolled Course</h2>
+          <h2>Enrolled Courses</h2>
           <div className="filterChips">
             {allLessons.map((lesson) => (
               <div
@@ -98,7 +171,7 @@ const Courses = () => {
                     {course.lessons.length > 3 && <li>...and more</li>}
                   </ul>
                   <button
-                    onClick={() => navigate("/home/courseDetails")}
+                    onClick={() => navigate("/home/courseContent")}
                     className="lessonDetailBtn3"
                   >
                     View Course
@@ -113,4 +186,4 @@ const Courses = () => {
   );
 };
 
-export default Courses;
+export default Enrolled;

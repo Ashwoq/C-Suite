@@ -2,16 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Courses.css";
 import { useNavigate } from "react-router-dom";
+import LoadingPage from "../LoadingPage/LoadingPage";
 // import coursesData from "../Assets/Data/CourseList.json";
-
-const resolveImagePath = (relativePath) => {
-  return require(`../Assets/Images/${relativePath}`);
-};
 
 const Courses = () => {
   const navigate = useNavigate();
   const [selectedFilters, setSelectedFilters] = useState([]);
-  const [coursesData, setcoursesData] = useState([]);
+  const [coursesData, setCoursesData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   //
 
@@ -21,14 +19,20 @@ const Courses = () => {
         const response = await axios.get(
           "https://csuite-production.up.railway.app/api/courseList"
         );
-        setcoursesData(response.data.courses);
+        setCoursesData(response.data.courses);
+        setIsLoading(false);
       } catch (err) {
         console.log(err);
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, []);
+
+  const resolveImagePath = (relativePath) => {
+    return require(`../Assets/Images/${relativePath}`);
+  };
 
   //
   const getAllLessons = () => {
@@ -55,7 +59,6 @@ const Courses = () => {
     }
   };
 
-  // Handle click on a filter chip
   const handleFilterClick = (filter) => {
     if (selectedFilters.includes(filter)) {
       setSelectedFilters(selectedFilters.filter((f) => f !== filter));
@@ -64,10 +67,17 @@ const Courses = () => {
     }
   };
 
-  // Clear all filters
   const clearFilters = () => {
     setSelectedFilters([]);
   };
+
+  if (isLoading) {
+    return (
+      <div>
+        <LoadingPage />
+      </div>
+    );
+  }
 
   return (
     <>

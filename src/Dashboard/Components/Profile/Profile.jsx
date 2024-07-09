@@ -5,6 +5,7 @@ import profileBanner from "../Assets/Images/profileBanner.jpg";
 import phoneSVG from "../Assets/SVG/phoneSVG.svg";
 import mailSVG from "../Assets/SVG/mailSVG.svg";
 import axios from "axios";
+import LoadingPage from "../LoadingPage/LoadingPage";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -153,7 +154,11 @@ const Profile = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LoadingPage />
+      </div>
+    );
   }
 
   return (
