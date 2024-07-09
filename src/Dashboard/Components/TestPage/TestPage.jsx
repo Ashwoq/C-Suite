@@ -43,7 +43,7 @@ const TestPage = () => {
         setCountdown((prevCountdown) => {
           if (prevCountdown === 1) {
             clearInterval(intervalId);
-            navigate("/courseContent");
+            navigate("/home/courseContent");
           }
           return prevCountdown - 1;
         });

@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Profile.css";
-import profileIMG from "../Assets/Images/profileImage.jpeg";
-import profileVector from "../Assets/Images/profileVector.png";
+import profileImage from "../Assets/Images/profileImage.jpeg";
+import profileBanner from "../Assets/Images/profileBanner.jpg";
+// import profileVector from "../Assets/Images/profileVector.png";
 import phoneSVG from "../Assets/SVG/phoneSVG.svg";
 import mailSVG from "../Assets/SVG/mailSVG.svg";
+import axios from "axios";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -14,6 +16,8 @@ const Profile = () => {
     testScore: "89",
     idCard: "20393-37373",
     jobTitle: "CEO",
+    profileImage: profileImage,
+    profileBanner: profileBanner,
     address: "123 Main St, Anytown, USA",
     companyName: "Tech Solutions Inc.",
     designation: "Chief Executive Officer",
@@ -26,8 +30,6 @@ const Profile = () => {
       address: "123 Main St, Anytown, USA",
     },
   });
-
-  const [profileImage, setProfileImage] = useState(profileIMG);
 
   const handleEditClick = () => {
     setIsEditing(!isEditing);
@@ -57,34 +59,60 @@ const Profile = () => {
     setIsEditing(false);
   };
 
-  const handleImageChange = (e) => {
+  const handleProfileImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const reader = new FileReader();
-      reader.onload = (e) => setProfileImage(e.target.result);
+      reader.onload = (e) =>
+        setProfileData((prevData) => ({
+          ...prevData,
+          profileImage: e.target.result,
+        }));
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
+  const handleProfileBannerChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) =>
+        setProfileData((prevData) => ({
+          ...prevData,
+          profileBanner: e.target.result,
+        }));
       reader.readAsDataURL(e.target.files[0]);
     }
   };
 
   return (
     <div className="profileContainer">
-      <div className="profileBanner">
+      <div className="profileBannerBox">
         <div className="profileBGBox">
-          <span className="profileBGTxt">
-            <h1>{profileData.designation}</h1>
-            <h6>{profileData.companyName}</h6>
-          </span>
-          <img src={profileVector} alt="profileVector" className="profileBG" />
-        </div>
-        <div className="profileHeader">
-          <div className="profileImage">
-            <img src={profileImage} alt="Profile" className="" />
-            {isEditing && (
+          <img src={profileData.profileBanner} alt="" />
+          {isEditing && (
+            <label className="custom-file-upload imageBanner">
               <input
                 type="file"
                 accept="image/*"
-                onChange={handleImageChange}
-                className="imageUpload"
+                onChange={handleProfileBannerChange}
+                className="imageBannerUpload"
               />
+              Choose File for Profile Banner
+            </label>
+          )}
+        </div>
+        <div className="profileHeader">
+          <div className="profileImage">
+            <img src={profileData.profileImage} alt="Profile" className="" />
+            {isEditing && (
+              <label className="custom-file-upload">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleProfileImageChange}
+                  className="imageUpload"
+                />
+                Choose File
+              </label>
             )}
           </div>
           <div className="profileHeaderInfo">

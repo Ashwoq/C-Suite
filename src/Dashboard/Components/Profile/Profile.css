@@ -9,22 +9,32 @@
   background-color: var(--primary-bg);
 }
 
-.profileBanner {
+.profileBannerBox {
   width: 100%;
 }
 
 .profileBGBox {
   width: 100%;
-  height: 35vh;
+  height: max-content;
+  max-height: 45vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-around;
-  background-image: url("../Assets/SVG/profileSVG.svg");
+  justify-content: center;
+  background-color: white;
+  /* background-image: url("../Assets/Images/profileBanner.jpg"); */
   border-radius: 15px;
-  background-size: cover;
-  background-color: var(--primary-dark);
-  background-repeat: no-repeat;
+  /* background-size: cover; */
+  /* background-color: var(--primary-dark); */
+  /* background-repeat: no-repeat; */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.profileBGBox img {
+  width: 100%;
+  height: 35vh;
+  object-fit: cover;
+  border-radius: 15px;
 }
 
 /* .profileBGTxt {
@@ -176,6 +186,40 @@
   height: 15px;
 }
 
+.imageBannerUpload {
+  background-color: red;
+}
+
+.imageUpload,
+.imageBannerUpload {
+  display: none;
+  transition: all 0.3s;
+}
+
+.custom-file-upload {
+  flex: 1;
+  display: inline-block;
+  padding: 8px 8px;
+  width: max-content;
+  /* max-width: 100px; */
+  cursor: pointer;
+  color: white;
+  background-color: var(--primary-dark);
+  border: none;
+  border-radius: 5px;
+  margin: 0px 10px;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.imageBanner {
+  margin: 10px 0;
+}
+
+.custom-file-upload:hover {
+  background-color: var(--primary-light);
+}
+
 @media (max-width: 1125px) {
   .profileContainer {
     padding: 12px 18px;
@@ -183,6 +227,10 @@
   }
 
   .profileBGBox {
+    min-height: 100px;
+  }
+
+  .profileBGBox img {
     height: 100px;
     /* background-color: blue; */
   }
@@ -293,5 +341,16 @@
 
   .profileSeperator {
     height: 0px;
+  }
+
+  .custom-file-upload {
+    padding: 2px 5px;
+    font-size: 8px;
+    border-radius: 3px;
+    margin: 0px;
+  }
+
+  .imageBanner {
+    margin: 3px 0;
   }
 }

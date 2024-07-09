@@ -10,3 +10,9 @@
 .outletBox {
   flex: 1;
 }
+
+@media (max-width: 1125px) {
+  .sidebarBox {
+    width: 60px;
+  }
+}

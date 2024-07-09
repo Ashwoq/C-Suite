@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import logoShort from "../Assets/Images/logoShort.png";
 import logoTxt from "../Assets/Images/logoTxt.png";
@@ -17,7 +17,34 @@ import {
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 
-function SidebarItem({ icon, text, active, alert, expanded, path }) {
+function SidebarItem({ icon, text, active, expanded, path, splMargin }) {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const iconStyle = {
+    marginLeft: expanded
+      ? ""
+      : windowWidth <= 1125 && !splMargin
+      ? "4px"
+      : windowWidth <= 1125 && splMargin
+      ? "2px"
+      : splMargin
+      ? "5.75px"
+      : "7px",
+    flex: expanded ? 1 : "",
+  };
+
   return (
     <NavLink
       exact
@@ -26,23 +53,17 @@ function SidebarItem({ icon, text, active, alert, expanded, path }) {
         expanded ? "expanded" : "collapsed"
       }`}
     >
-      <FontAwesomeIcon
-        icon={icon}
-        className="icon"
-        // style={{ margin: expanded ? "" : "auto" }}
-        style={{ marginLeft: expanded ? "" : "6px", flex: expanded ? 1 : "" }}
-      />
+      <FontAwesomeIcon icon={icon} className="icon" style={iconStyle} />
       <span
         className="item-text"
         style={{
-          marginLeft: expanded ? "10px" : "",
+          marginLeft: expanded ? "6px" : "",
           flex: expanded ? 6 : 0,
           transform: expanded ? "translateX(0%)" : "translateX(-100%)",
           opacity: expanded ? 1 : 0,
         }}
       >
         {text}
-        {/* {expanded ? text : ""} */}
       </span>
     </NavLink>
   );
@@ -50,9 +71,27 @@ function SidebarItem({ icon, text, active, alert, expanded, path }) {
 
 const Sidebar = () => {
   const [expanded, setExpanded] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const toggleSidebar = () => {
     setExpanded(!expanded);
+  };
+
+  const iconStyle = {
+    marginLeft: expanded ? "" : windowWidth <= 1125 ? "3.5px" : "8px",
+    flex: expanded ? 1 : "",
   };
 
   return (
@@ -60,11 +99,6 @@ const Sidebar = () => {
       <aside className={`sidebar ${expanded ? "expanded" : "collapsed"}`}>
         <nav className="sidebar-nav">
           <div className="sidebar-header">
-            {/* <img
-              src={expanded ? logo : logoShort}
-              className={expanded ? "logo" : "logo-short"}
-              alt="Logo"
-            /> */}
             <img
               src={expanded ? logoShort : logoShort}
               className={expanded ? "logo-short" : "logo-short"}
@@ -88,29 +122,23 @@ const Sidebar = () => {
               <FontAwesomeIcon
                 icon={expanded ? faChevronLeft : faBars}
                 className="icon"
-                // style={{ margin: expanded ? "" : "auto" }}
-                style={{
-                  marginLeft: expanded ? "" : "6px",
-                  flex: expanded ? 1 : "",
-                }}
+                style={iconStyle}
               />
-
               <span
                 className="item-text"
                 style={{
-                  marginLeft: expanded ? "10px" : "",
+                  marginLeft: expanded ? "6px" : "",
                   flex: expanded ? 6 : 0,
-                  // transform: expanded ? "translateX(0%)" : "translateX(-100%)",
                   opacity: expanded ? 1 : 0,
                 }}
               >
-                {/* {expanded ? "Hide" : ""} */}
                 {"Hide"}
               </span>
             </button>
             <SidebarItem
               path={"./dash"}
               icon={faHome}
+              splMargin={true}
               text={"Dashboard"}
               expanded={expanded}
             />
@@ -122,6 +150,7 @@ const Sidebar = () => {
             />
             <SidebarItem
               icon={faHeart}
+              splMargin={true}
               path={"./enrolled"}
               text={"Enrolled"}
               expanded={expanded}
