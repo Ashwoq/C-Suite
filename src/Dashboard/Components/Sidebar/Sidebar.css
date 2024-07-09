@@ -15,7 +15,7 @@
   left: 0;
   height: 100vh;
   z-index: 9999;
-  padding: 15px;
+  padding: 12px;
   background-color: white;
   transition: width 0.3s ease-in-out, padding 0.3s ease-in-out;
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
@@ -30,7 +30,7 @@
 }
 
 .sidebar.collapsed {
-  width: 80px;
+  width: 75px;
 }
 
 .sidebar-nav {

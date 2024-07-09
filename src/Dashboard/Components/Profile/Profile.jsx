@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./Profile.css";
 import profileImage from "../Assets/Images/profileImage.jpeg";
 import profileBanner from "../Assets/Images/profileBanner.jpg";
-// import profileVector from "../Assets/Images/profileVector.png";
 import phoneSVG from "../Assets/SVG/phoneSVG.svg";
 import mailSVG from "../Assets/SVG/mailSVG.svg";
 import axios from "axios";
@@ -10,26 +9,55 @@ import axios from "axios";
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
-    name: "John Doe",
-    email: "johndoe@example.com",
-    phone: "1234567890",
-    testScore: "89",
-    idCard: "20393-37373",
-    jobTitle: "CEO",
-    profileImage: profileImage,
+    name: "",
+    email: "",
+    phoneNumber: "",
+    testScore: "",
+    idCard: "",
+    jobTitle: "",
+    profilePic: profileImage,
     profileBanner: profileBanner,
-    address: "123 Main St, Anytown, USA",
-    companyName: "Tech Solutions Inc.",
-    designation: "Chief Executive Officer",
-    linkedIn: "https://linkedin.com/in/johndoe",
-    bio: "Experienced leader in the tech industry with over 20 years of experience.",
+    address: "",
+    companyname: "",
+    position: "",
+    linkedIn: "",
+    bio: "",
     emergencyContact: {
-      name: "Jane Doe",
-      relationship: "Spouse",
-      phone: "0987654321",
-      address: "123 Main St, Anytown, USA",
+      name: "",
+      relationship: "",
+      phone: "",
+      address: "",
     },
   });
+  const [selectedProfileImage, setSelectedProfileImage] = useState(null);
+  const [selectedProfileBanner, setSelectedProfileBanner] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get("https://csuite-production.up.railway.app/api/user")
+      .then((response) => {
+        const data = response.data.users[0];
+        setProfileData(data);
+        if (data.profilePic) {
+          setProfileData((prevData) => ({
+            ...prevData,
+            profilePic: `data:image/jpeg;base64,${data.profilePic}`,
+          }));
+        }
+        if (data.profileBanner) {
+          setProfileData((prevData) => ({
+            ...prevData,
+            profileBanner: `data:image/jpeg;base64,${data.profileBanner}`,
+          }));
+        }
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching profile data:", error);
+        setIsLoading(false);
+      });
+  }, []);
 
   const handleEditClick = () => {
     setIsEditing(!isEditing);
@@ -37,7 +65,6 @@ const Profile = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     if (name.startsWith("emergencyContact.")) {
       const field = name.split(".")[1];
       setProfileData((prevData) => ({
@@ -55,33 +82,79 @@ const Profile = () => {
     }
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     setIsEditing(false);
+    const formData = new FormData();
+
+    for (const key in profileData) {
+      if (key === "emergencyContact") {
+        const emergencyContact = profileData[key];
+        for (const field in emergencyContact) {
+          formData.append(`emergencyContact.${field}`, emergencyContact[field]);
+        }
+      } else {
+        formData.append(key, profileData[key]);
+      }
+    }
+    if (selectedProfileImage) {
+      formData.append("profilePic", selectedProfileImage);
+    }
+    if (selectedProfileBanner) {
+      formData.append("profileBanner", selectedProfileBanner);
+    }
+
+    try {
+      const response = await axios.put(
+        `https://csuite-production.up.railway.app/api/user/${profileData._id}`,
+        formData
+      );
+
+      if (response.status !== 200) {
+        console.error("Error updating profile:", response.data);
+      }
+    } catch (error) {
+      console.error("Network error updating profile:", error);
+    }
   };
 
   const handleProfileImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setSelectedProfileImage(file);
       const reader = new FileReader();
       reader.onload = (e) =>
         setProfileData((prevData) => ({
           ...prevData,
-          profileImage: e.target.result,
+          profilePic: e.target.result,
         }));
-      reader.readAsDataURL(e.target.files[0]);
+      reader.readAsDataURL(file);
     }
   };
 
   const handleProfileBannerChange = (e) => {
     if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setSelectedProfileBanner(file);
       const reader = new FileReader();
       reader.onload = (e) =>
         setProfileData((prevData) => ({
           ...prevData,
           profileBanner: e.target.result,
         }));
-      reader.readAsDataURL(e.target.files[0]);
+      reader.readAsDataURL(file);
     }
   };
+
+  const inputClassName = (value) => {
+    if (value === "" || value === null) {
+      return "error-border";
+    }
+    return "";
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="profileContainer">
@@ -102,7 +175,7 @@ const Profile = () => {
         </div>
         <div className="profileHeader">
           <div className="profileImage">
-            <img src={profileData.profileImage} alt="Profile" className="" />
+            <img src={profileData.profilePic} alt="Profile" className="" />
             {isEditing && (
               <label className="custom-file-upload">
                 <input
@@ -129,7 +202,7 @@ const Profile = () => {
       <div className="profileContent">
         <div className="profileSection">
           <h5>General Information</h5>
-          <div className="profileDetails">
+          <div className={`${inputClassName(profileData.name)} profileDetails`}>
             <label>Name</label>
             <input
               type="text"
@@ -139,7 +212,10 @@ const Profile = () => {
               disabled={!isEditing}
             />
           </div>
-          <div className="profileDetails">
+          <div
+            className={`${inputClassName(profileData.jobTitle)} profileDetails`}
+          >
+            {" "}
             <label>Job Title</label>
             <input
               type="text"
@@ -149,7 +225,9 @@ const Profile = () => {
               disabled={!isEditing}
             />
           </div>
-          <div className="profileDetails">
+          <div
+            className={`${inputClassName(profileData.idCard)} profileDetails`}
+          >
             <label>ID Card</label>
             <input
               type="text"
@@ -159,7 +237,9 @@ const Profile = () => {
               disabled={!isEditing}
             />
           </div>
-          <div className="profileDetails">
+          <div
+            className={`${inputClassName(profileData.address)} profileDetails`}
+          >
             <label>Address</label>
             <textarea
               type="text"
@@ -169,7 +249,11 @@ const Profile = () => {
               disabled={!isEditing}
             />
           </div>
-          <div className="profileDetails">
+          <div
+            className={`${inputClassName(
+              profileData.testScore
+            )} profileDetails`}
+          >
             <label>Test Score</label>
             <input
               type="number"
@@ -180,7 +264,11 @@ const Profile = () => {
           </div>
           <div className="profileSeperator"></div>
           <h5>Contact Details</h5>
-          <div className="profileDetails profileSPLBox">
+          <div
+            className={`${inputClassName(
+              profileData.email
+            )} profileDetails profileSPLBox`}
+          >
             <img src={phoneSVG} alt="phoneNumberSVG" />
             <label>Email</label>
             <input
@@ -191,13 +279,17 @@ const Profile = () => {
               disabled={!isEditing}
             />
           </div>
-          <div className="profileDetails profileSPLBox">
+          <div
+            className={`${inputClassName(
+              profileData.phoneNumber
+            )} profileDetails profileSPLBox`}
+          >
             <img src={mailSVG} alt="mailSVG" />
             <label>Phone Number</label>
             <input
               type="number"
-              name="phone"
-              value={profileData.phone}
+              name="phoneNumber"
+              value={profileData.phoneNumber}
               onChange={handleChange}
               disabled={!isEditing}
             />
@@ -205,27 +297,35 @@ const Profile = () => {
         </div>
         <div className="profileSection">
           <h5>Professional Details</h5>
-          <div className="profileDetails">
+          <div
+            className={`${inputClassName(
+              profileData.companyname
+            )} profileDetails`}
+          >
             <label>Company Name</label>
             <input
               type="text"
-              name="companyName"
-              value={profileData.companyName}
+              name="companyname"
+              value={profileData.companyname}
               onChange={handleChange}
               disabled={!isEditing}
             />
           </div>
-          <div className="profileDetails">
-            <label>Designation</label>
+          <div
+            className={`${inputClassName(profileData.position)} profileDetails`}
+          >
+            <label>Position</label>
             <input
               type="text"
-              name="designation"
-              value={profileData.designation}
+              name="position"
+              value={profileData.position}
               onChange={handleChange}
               disabled={!isEditing}
             />
           </div>
-          <div className="profileDetails">
+          <div
+            className={`${inputClassName(profileData.linkedIn)} profileDetails`}
+          >
             <label>LinkedIn</label>
             <input
               type="url"
@@ -235,7 +335,7 @@ const Profile = () => {
               disabled={!isEditing}
             />
           </div>
-          <div className="profileDetails">
+          <div className={`${inputClassName(profileData.bio)} profileDetails`}>
             <label>Bio</label>
             <textarea
               name="bio"
@@ -246,7 +346,11 @@ const Profile = () => {
           </div>
           <div className="profileSeperator"></div>
           <h5>Emergency Contact</h5>
-          <div className="profileDetails">
+          <div
+            className={`${inputClassName(
+              profileData.emergencyContact.name
+            )} profileDetails`}
+          >
             <label>Full Name</label>
             <input
               type="text"
@@ -256,7 +360,11 @@ const Profile = () => {
               disabled={!isEditing}
             />
           </div>
-          <div className="profileDetails">
+          <div
+            className={`${inputClassName(
+              profileData.emergencyContact.relationship
+            )} profileDetails`}
+          >
             <label>Relationship</label>
             <input
               type="text"
@@ -266,7 +374,11 @@ const Profile = () => {
               disabled={!isEditing}
             />
           </div>
-          <div className="profileDetails">
+          <div
+            className={`${inputClassName(
+              profileData.emergencyContact.phone
+            )} profileDetails`}
+          >
             <label>Phone Number</label>
             <input
               type="number"
@@ -276,7 +388,11 @@ const Profile = () => {
               disabled={!isEditing}
             />
           </div>
-          <div className="profileDetails">
+          <div
+            className={`${inputClassName(
+              profileData.emergencyContact.address
+            )} profileDetails`}
+          >
             <label>Address</label>
             <textarea
               name="emergencyContact.address"

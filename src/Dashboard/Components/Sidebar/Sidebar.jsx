@@ -40,14 +40,13 @@ function SidebarItem({ icon, text, active, expanded, path, splMargin }) {
       : windowWidth <= 1125 && splMargin
       ? "2px"
       : splMargin
-      ? "5.75px"
-      : "7px",
+      ? "6.25px"
+      : "8.25px",
     flex: expanded ? 1 : "",
   };
 
   return (
     <NavLink
-      exact
       to={path}
       className={`sidebar-item ${active ? "active" : ""} ${
         expanded ? "expanded" : "collapsed"
