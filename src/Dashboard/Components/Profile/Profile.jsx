@@ -15,7 +15,7 @@ const Profile = () => {
     phoneNumber: "",
     testScore: "",
     idCard: "",
-    jobTitle: "",
+    gender: "",
     profilePic: profileImage,
     profileBanner: profileBanner,
     address: "",
@@ -218,14 +218,14 @@ const Profile = () => {
             />
           </div>
           <div
-            className={`${inputClassName(profileData.jobTitle)} profileDetails`}
+            className={`${inputClassName(profileData.gender)} profileDetails`}
           >
             {" "}
-            <label>Job Title</label>
+            <label>Gender</label>
             <input
               type="text"
-              name="jobTitle"
-              value={profileData.jobTitle}
+              name="gender"
+              value={profileData.gender}
               onChange={handleChange}
               disabled={!isEditing}
             />
