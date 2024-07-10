@@ -134,11 +134,8 @@ const CourseDetails = () => {
                   title="Description"
                   className="CDtabBoxDesc"
                 >
-                  <h1 style={{ fontSize: "25px" }} className="px-4">
-                    {courseContentDetailsData.title}
-                  </h1>
-                  <br />
-                  <p className="text- px-4">
+                  <h4 className="">{courseContentDetailsData.title}</h4>
+                  <p className="">
                     {isExpanded
                       ? courseContentDetailsData.description
                       : courseContentDetailsData.description
@@ -150,7 +147,7 @@ const CourseDetails = () => {
 
                     {!isExpanded && (
                       <span
-                        className="read-more-link text-primary"
+                        className="read-more-link text-primary px-1"
                         onClick={toggleDescription}
                         style={{ cursor: "pointer" }}
                       >
@@ -159,7 +156,7 @@ const CourseDetails = () => {
                     )}
                     {isExpanded && (
                       <span
-                        className="read-more-link text-primary "
+                        className="read-more-link text-primary px-1"
                         style={{ cursor: "pointer" }}
                         onClick={toggleDescription}
                       >
@@ -167,48 +164,44 @@ const CourseDetails = () => {
                       </span>
                     )}
                   </p>
-                  <br />
-                  <h2 style={{ fontSize: "20px" }} className="px-4">
+                  <h4 className="">
                     {" "}
                     What you will gain after completion of the course
-                  </h2>
+                  </h4>
                   <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      flexWrap: "wrap",
-                      gap: "20px",
-                    }}
-                    className="px-4"
+                    // style={{
+                    //   display: "flex",
+                    //   flexDirection: "row",
+                    //   flexWrap: "wrap",
+                    //   gap: "20px",
+                    // }}
+                    className="CDOverviewPills"
                   >
                     {courseContentDetailsData.overviewPoints &&
                       courseContentDetailsData.overviewPoints.map(
                         (point, index) => (
                           <span
                             key={index}
-                            className="overview-button px-3"
-                            style={{
-                              backgroundColor: "#f3e6ff",
-                              borderRadius: "20px",
-                            }}
+                            className="overview-button"
+                            // style={{
+                            //   backgroundColor: "#f3e6ff",
+                            //   borderRadius: "20px",
+                            // }}
                           >
                             {point.heading}
                           </span>
                         )
                       )}
                   </div>
-                  <br />
-                  <h2 className="px-4" style={{ fontSize: "20px" }}>
-                    Recommended Courses
-                  </h2>
+                  <h4>Recommended Courses</h4>
                   <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      flexWrap: "wrap",
-                      gap: "20px",
-                    }}
-                    className="px-4"
+                    // style={{
+                    //   display: "flex",
+                    //   flexDirection: "row",
+                    //   flexWrap: "wrap",
+                    //   gap: "20px",
+                    // }}
+                    className="CDRmdCourse"
                   >
                     {courseContentDetailsData.recommendedCourses &&
                       courseContentDetailsData.recommendedCourses.map(
@@ -216,7 +209,7 @@ const CourseDetails = () => {
                           <CourseRecommendation
                             key={index}
                             title={course.title}
-                            description={course.description}
+                            link={course.link}
                           />
                         )
                       )}
@@ -250,7 +243,7 @@ const CourseDetails = () => {
                                 </div>
                               </Accordion.Header>
                               <Accordion.Body>
-                                <div>
+                                <div className="CDAccodrionBody">
                                   <ul className="list-group">
                                     {lesson.videos.map((video, vidIndex) => (
                                       <li
@@ -263,7 +256,7 @@ const CourseDetails = () => {
                                             {video.title}
                                           </a>
                                         </span>
-                                        <span className="lesson-duration">
+                                        <span className="CDlesson-duration">
                                           Duration: {video.duration}
                                         </span>
                                       </li>

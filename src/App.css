@@ -16,3 +16,6 @@ html {
   --shadow-color: rgba(0, 0, 0, 0.2);
   --shadow-light: rgba(0, 0, 0, 0.1);
 }
+
+/* -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27); */
+/* box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27); */

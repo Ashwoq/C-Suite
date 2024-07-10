@@ -1,51 +1,15 @@
 import React from "react";
+import "./CourseRecommendation.css";
 import js from "../Assets/Images/imagenotxt.png";
 
-const CourseRecommendation = ({ title, description }) => {
+const CourseRecommendation = ({ title, link }) => {
   return (
-    <div
-      style={{
-        height: "250px",
-        width: "300px",
-        borderRadius: "20px",
-        backgroundColor: "#f3e6ff",
-        boxShadow: "0px 4px 6px #d2b2ff",
-        border: "1px solid #a86aff84",
-        margin: "10px",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        className="my-2"
-      >
-        <img
-          src={js}
-          style={{
-            height: "150px",
-            width: "100%",
-            objectFit: "contain",
-            borderRadius: "15px",
-          }}
-          alt="thumbnail"
-        />
+    <div className="cr-card">
+      <div className="cr-image-container">
+        <img src={js} className="cr-image" alt="thumbnail" />
+        <div className="cr-title">{title}</div>
       </div>
-      <div className="px-4">
-        <h1 style={{ fontSize: "15px" }}>{title}</h1>
-        <p
-          style={{
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            fontSize: "10px",
-          }}
-        >
-          {description}
-        </p>
-      </div>
+      <div className="cr-button">View Course</div>
     </div>
   );
 };

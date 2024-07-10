@@ -1,177 +1,125 @@
 .courseContentContainer {
-  display: flex;
   width: 100%;
+  display: flex;
   padding: 20px;
+  cursor: default;
+  overflow: hidden;
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  overflow: hidden;
-  cursor: default;
   background-color: var(--primary-bg);
 }
 
 .firstRow {
   width: 100%;
-  padding: 13px 25px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  background-color: white;
-  box-shadow: 0px 4px 6px var(--shadow-color);
-}
-
-.firstRowBtn {
   display: flex;
   align-items: center;
-  justify-content: center;
-  outline: none;
-  border: none;
-  /* padding: 0px; */
-  color: white;
-  padding: 5px 20px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  background-color: var(--primary-light);
-  transition: all 0.3s;
-}
-
-.firstRowBtn span {
-  font-size: 1.5em;
-  padding: 0;
-  line-height: 1em;
-  width: min-content;
-  /* background-color: red; */
-}
-
-.firstRowBtn:hover,
-.firstRowHeadingBox button:hover {
-  transform: translateY(-3px);
-  background-color: var(--primary-color);
-  box-shadow: 0px 6px 8px var(--shadow-light);
-}
-
-.firstRowHeadingBox {
-  display: flex;
-  /* background-color: yellow; */
+  flex-direction: row;
+  padding: 16px 18px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  background-color: white;
+  justify-content: space-between;
+  box-shadow: 4px 8px 10px -3px rgba(0, 0, 0, 0.1);
 }
 
 .courseHeading {
-  font-size: 1.75em;
+  flex: 10;
+  text-align: center;
   font-weight: 500;
+  font-size: 1.75em;
   color: var(--primary-dark);
 }
 
-.firstRowHeadingBox button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: -10px;
-  outline: none;
-  border: none;
-  color: white;
-  padding: 0px;
-  border-radius: 8px;
-  background-color: var(--primary-light);
-  transition: all 0.3s;
-}
-
-/* .firstRowHeadingBox button span {
-  background-color: aqua;
-} */
-
-.MenuBarIcons {
-  padding-left: 10px;
-  margin-top: 10px;
-}
-
-.TopBar {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-}
-.TitleBar {
-  font-weight: 500;
-  font-size: 30px;
-}
-.BackBtn {
-  padding: 15px 25px;
-  border: unset;
-  border-radius: 15px;
-  color: #212121;
+.BackBtn,
+.NextBtn {
+  flex: 1;
   z-index: 1;
-  background: var(--primary-bg);
-  position: relative;
-
+  border: unset;
+  color: white;
   font-size: 17px;
-  /* -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27); */
-  /* box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27); */
-  transition: all 250ms;
   overflow: hidden;
+  position: relative;
+  padding: 10px 20px;
+  border-radius: 10px;
+  transition: all 250ms;
+  background-color: var(--primary-light);
 }
 
-.BackBtn::before {
+.BackBtn::before,
+.NextBtn::before {
+  z-index: -1;
   content: "";
   position: absolute;
   top: 0;
-  left: 0;
-  height: 100%;
   width: 0;
-  border-radius: 15px;
-  background-color: var(--primary-color);
-  z-index: -1;
-  -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
-  box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+  height: 100%;
+  border-radius: 10px;
   transition: all 250ms;
+  background-color: var(--primary-color);
+}
+
+.NextBtn::before {
+  left: 0;
+}
+
+.BackBtn::before {
+  right: 0;
+}
+
+.NextBtn:hover {
+  color: #e8e8e8;
+  transform: translateX(3px);
+  box-shadow: 0px 6px 8px var(--shadow-light);
 }
 
 .BackBtn:hover {
   color: #e8e8e8;
+  transform: translateX(-3px);
+  box-shadow: 0px 6px 8px var(--shadow-light);
 }
 
-.BackBtn:hover::before {
+.BackBtn:hover::before,
+.NextBtn:hover::before {
   width: 100%;
 }
 
-.settingTab {
-  display: flex;
-  margin-right: -10px;
-  margin-left: 10px;
+.infoBox {
+  padding: 15px 20px;
   border-radius: 10px;
-  justify-content: space-between;
-  background-color: var(--primary-bg);
+  background-color: white;
+  box-shadow: 0px 4px 6px var(--shadow-color);
 }
 
-.infoBox {
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0px 4px 6px var(--shadow-color);
-  padding: 20px;
-}
 .infoBox h1 {
-  font-size: 14px;
+  margin-bottom: 7px;
+  font-size: 1.3em;
 }
 
 .lessonDescriptionBox {
-  background-color: var(--primary-bg);
+  padding: 15px 12px;
   border-radius: 10px;
-  padding: 10px;
+  background-color: var(--primary-bg);
 }
+
 .lessonDescriptionBoxTitle {
-  font-size: 20px;
+  font-size: 18px;
 }
+
 .lessonDescriptionBoxDescription {
+  margin: 0%;
   padding-left: 18px;
 }
 
 .testButton {
-  outline: none;
-  border: none;
-  border-radius: 8px;
-  padding: 7px 20px;
-  font-size: 1.1em;
-  background-color: var(--primary-light);
   color: white;
+  border: none;
+  outline: none;
+  font-size: 1.1em;
+  padding: 7px 20px;
+  border-radius: 8px;
   transition: background-color 0.3s;
+  background-color: var(--primary-light);
 }
 
 .testButton:hover {
@@ -180,7 +128,6 @@
 }
 
 .courseContentContainer .secondRow {
-  /* background-color: aqua; */
   width: 100%;
 }
 
@@ -188,97 +135,84 @@
   padding-left: 0%;
 }
 
-/* .videoBox {
-  background-color: rgb(159, 101, 25);
-} */
-
 .videoBox iframe {
   border-radius: 20px;
   box-shadow: 0px 4px 6px var(--shadow-color);
 }
 
-/* .videoTitle {
-  font-size: 1.3em;
-  background-color: yellow;
-  color: var(--primary-dark);
-} */
+.videoBox div:first-child {
+  margin-bottom: 15px;
+}
 
-/* .tabBox {
-  box-shadow: 0px 4px 6px var(--shadow-color);
-} */
-
-.accordianBox {
+.CCaccordianBox {
   padding: 5px 15px;
   border-radius: 10px;
   background-color: white;
   box-shadow: 0px 4px 6px var(--shadow-color);
 }
 
-.accordianBox .accordion-item {
+.CCaccordianBox .accordion-item {
   border: none;
-  /* background-color: violet; */
   margin: 8px 0;
   border-radius: 16px;
 }
 
-.accordianBox .accordion-button {
+.CCaccordianBox .accordion-button {
+  border: none;
   border-radius: 16px !important;
   background-color: var(--primary-bg);
-  border: none;
   transition: border-radius 0.3s ease, background-color 0.3s;
 }
 
-.accordianBox .accordion-button:not(.collapsed) {
+.CCaccordianBox .accordion-button:not(.collapsed) {
+  color: white;
+  background-color: var(--primary-light);
   border-bottom-left-radius: 16px !important;
   border-bottom-right-radius: 16px !important;
-  background-color: var(--primary-light);
-  color: white;
 }
 
-.accordianBox .accordion-collapse {
+.CCaccordianBox .accordion-collapse {
   border-top-left-radius: 16px !important;
   border-top-right-radius: 16px !important;
 }
 
-.accordianBox .accordion-header:focus,
-.accordianBox .accordion-header:active,
-.accordianBox .accordion-header:focus-visible,
-.accordianBox .accordion-button:focus,
-.accordianBox .accordion-button:active,
-.accordianBox .accordion-button:focus-visible {
+.CCaccordianBox .accordion-header:focus,
+.CCaccordianBox .accordion-header:active,
+.CCaccordianBox .accordion-header:focus-visible,
+.CCaccordianBox .accordion-button:focus,
+.CCaccordianBox .accordion-button:active,
+.CCaccordianBox .accordion-button:focus-visible {
   outline: none;
   /* color: black; */
   box-shadow: none;
 }
 
-.accordianBox .accordion-header .accordion-button {
+.CCaccordianBox .accordion-header .accordion-button {
   padding: 15px;
 }
 
-.accordianBox .accordion-body {
+.CCaccordianBox .accordion-body {
+  font-size: 0.9em;
   padding: 8px 10px;
   padding-left: 50px;
   border-radius: 16px;
-  font-size: 0.9em;
-  /* background-color: var(--primary-bg); */
 }
 
-.accordianBox .accordion-body .list-group-item:first-child {
+.CCaccordianBox .accordion-body .list-group-item:first-child {
   margin-top: 0px;
 }
 
-.accordianBox .accordion-body .list-group-item {
-  margin-top: 7px;
+.CCaccordianBox .accordion-body .list-group-item {
+  border: none;
   display: flex;
   outline: none;
-  border: none;
+  margin-top: 7px;
   flex-direction: column;
   border-radius: 10px !important;
   background-color: var(--primary-bg);
 }
 
 .lesson-meta {
-  /* background-color: yellow; */
   padding-left: 15px;
 }
 
@@ -286,15 +220,13 @@
   font-size: 1.1em;
   font-weight: 450;
   margin-bottom: 5px;
-  /* background-color: steelblue; */
 }
 
 .lesson-meta .lesson-duration,
 .list-group-item .lesson-duration {
-  padding: 0 0 0 20px;
   font-size: 0.8em;
   width: max-content;
-  /* background-color: green; */
+  padding: 0 0 0 20px;
 }
 
 .lesson-meta span {
@@ -303,110 +235,80 @@
 
 .list-group-item {
   padding: 8px 10px;
-  /* background-color: palegoldenrod; */
 }
 
 .testButtonBox {
-  padding: 8px 15px;
-  margin-top: 7px;
   display: flex;
   gap: 5px;
-  color: var(--primary-dark);
-  outline: none;
   border: none;
-  flex-direction: column;
+  outline: none;
+  margin-top: 7px;
+  padding: 8px 15px;
   border-radius: 10px;
+  flex-direction: column;
+  color: var(--primary-dark);
   background-color: var(--primary-bg);
 }
 
 .testButtonBox div {
-  display: flex;
   width: 100%;
-  border-radius: 5px;
+  display: flex;
   padding: 2px 3px;
+  border-radius: 5px;
   background-color: white;
 }
 
 .testButtonBox div div {
-  display: flex;
   width: 60%;
+  display: flex;
   flex-direction: column;
 }
 
 .testButton {
-  /* width: 40%; */
   padding: 5px 15px;
   margin-left: auto;
 }
 
-.flexyBox {
-  flex-direction: row;
-  align-items: center;
-  background-color: white;
-  margin-bottom: 10px;
-  border-radius: 0%;
-}
-
-.flexyBox button {
-  margin-left: auto;
-}
-
 .list-group-item a {
-  padding-left: 5px;
   font-weight: 400;
+  padding-left: 5px;
   text-decoration: none;
   color: var(--primary-dark);
 }
 
-/*  */
-.CCbgColor {
-  border-radius: 10px;
-  background-color: white;
-  box-shadow: 0px 4px 6px var(--shadow-color);
-}
-
-.showClassForXS {
-  display: none;
-}
-
-/*  */
 @media (max-width: 1125px) {
-  .hideClassForXS {
-    display: none;
-  }
-
-  .showClassForXS {
-    display: flex;
+  .courseContentContainer {
+    padding: 13px 15px;
   }
 
   .firstRow {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
+    padding: 13px 7px;
   }
 
   .courseHeading {
-    font-size: 0.99em;
-    /* flex: 3; */
+    margin: 0 2px;
+    font-size: 0.95em;
+    line-height: 1.15em;
   }
 
-  .firstRowBtn {
-    padding: 5px 10px;
-    /* flex: 1; */
+  .BackBtn,
+  .NextBtn {
+    flex: 1;
     margin: 0;
-    font-size: 0.7em;
-  }
-
-  .btnRows {
-    display: flex;
-    margin-bottom: 5px;
-    justify-content: space-between;
+    font-size: 0.5em;
+    padding: 7px 10px;
+    border-radius: 7px;
+    line-height: 1em;
   }
 
   .pdy .videoBox {
+    margin-bottom: 10px;
     padding-left: 0% !important;
     padding-right: 0% !important;
-    margin-bottom: -10px;
+  }
+
+  .videoBox div:first-child {
+    margin-bottom: 10px;
   }
 
   .secondRow .col-md-8 {
@@ -415,8 +317,8 @@
   }
 
   .testButtonBox {
-    padding: 8px 12px;
-    font-size: 0.825em;
+    padding: 0px;
+    font-size: 0.95em;
   }
 
   .testButtonBox div div {
@@ -424,27 +326,81 @@
   }
 
   .testButton {
-    font-size: 0.85em;
     margin: auto;
+    font-size: 0.85em;
   }
 
-  .lesson-title {
-    font-size: 0.8em;
-  }
-
-  .lessonDescriptionBoxTitle {
-    font-size: 14px;
-  }
-  .lessonDescriptionBoxDescription {
-    font-size: 12px;
+  .infoBox {
+    padding: 10px 12px;
   }
 
   .infoBox h1 {
-    font-size: 14px;
+    font-size: 0.9em;
+  }
+
+  .lessonDescriptionBox {
+    padding: 11px;
+  }
+
+  .lessonDescriptionBoxTitle {
+    font-size: 13px;
+  }
+
+  .lessonDescriptionBoxDescription {
+    font-size: 12px;
+    line-height: 17px;
+  }
+
+  .CCaccordianBox {
+    padding: 5px 12px;
+  }
+
+  .CCaccordianBox .accordion-item {
+    margin: 6px 0;
+  }
+
+  .CCaccordianBox .accordion-header .accordion-button {
+    padding: 8px;
+    border-radius: 10px !important;
+  }
+
+  .CCaccordianBox .accordion-body {
+    padding: 5px;
+    font-size: 0.8em;
+    padding-left: 35px;
+  }
+
+  .CCaccordianBox .accordion-body .list-group-item {
+    margin-top: 5px;
+    border-radius: 7px !important;
+  }
+
+  .lesson-meta {
+    padding-left: 0px;
+  }
+
+  .lesson-title {
+    font-size: 0.75em;
+    margin-bottom: 0px;
+  }
+
+  .lesson-meta .lesson-duration,
+  .list-group-item .lesson-duration {
+    font-size: 0.7em;
+    padding: 0 0 0 10px;
+  }
+
+  .lesson-meta span {
+    font-size: 0.7em;
+  }
+
+  .testButtonBox {
+    margin-top: 5px;
+    padding: 5px 8px;
+    border-radius: 7px;
+  }
+
+  .testButton {
+    padding: 5px 10px;
   }
 }
-
-/* 
-  margin-right: -10px;
-  margin-left: 10px;
-   */
