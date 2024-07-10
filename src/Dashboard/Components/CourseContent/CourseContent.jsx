@@ -1,31 +1,39 @@
-import React, { useState } from "react";
-import Accordion from "react-bootstrap/Accordion";
-import Tab from "react-bootstrap/Tab";
-import Tabs from "react-bootstrap/Tabs";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./CourseContent.css";
 import { useNavigate } from "react-router-dom";
-import courseData from "../Assets/Data/CourseContentDetails.json";
+import LoadingPage from "../LoadingPage/LoadingPage";
+import Accordion from "react-bootstrap/Accordion";
 import testData from "../Assets/Data/TestData.json";
-import PersonIcon from "../Assets/SVG/PersonIcon.svg";
-import SettingsIcon from "../Assets/SVG/SettingsIcon.svg";
-import LogoutIcon from "../Assets/SVG/LogoutIcon.svg";
-import HomeIcon from "../Assets/SVG/HomeIcon.svg";
+// import courseData from "../Assets/Data/CourseContentDetails.json";
 
 const CourseContent = () => {
   const navigate = useNavigate();
 
   const [activeLesson, setActiveLesson] = useState(null);
-  const [activeLessonTab, setActiveLessonTab] = useState(null);
+  const [courseData, setCourseData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://csuite-production.up.railway.app/api/courseDetail"
+        );
+        setCourseData(response.data.courses[0]);
+        setIsLoading(false);
+      } catch (err) {
+        console.error("Error fetching course details:", err);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleLessonClick = (index) => {
     setActiveLesson(index === activeLesson ? null : index);
   };
-
-  const handleLessonClickTab = (index) => {
-    setActiveLessonTab(index === activeLessonTab ? null : index);
-  };
-
-  const [activeTab, setActiveTab] = useState("description");
 
   const calculateTotalDuration = (videos) => {
     let totalSeconds = 0;
@@ -46,36 +54,31 @@ const CourseContent = () => {
     return `${parseInt(minutes, 10)}m ${parseInt(seconds, 10)}s`;
   }
 
-  //
   const findCourseTestData = (courseTitle) => {
     return testData.courses.find((course) => course.title === courseTitle);
   };
 
+  if (isLoading) {
+    return (
+      <div>
+        <LoadingPage />
+      </div>
+    );
+  }
+
   return (
     <div className="courseContentContainer">
-      {/* hideClassForXS */}
       <div className="row firstRow g-0">
         <button className="BackBtn" onClick={() => navigate(-1)}>
           Back
         </button>
         <div className="courseHeading">{courseData.title}</div>
-
         <button className="NextBtn">Next</button>
       </div>
-      {/* <div className="row firstRow showClassForXS g-0">
-        <div className="btnRows">
-          <button className="firstRowBtn" onClick={() => navigate(-1)}>
-            Go Back
-          </button>
-          <button className="firstRowBtn">Next Video</button>
-        </div>
-
-        <div className="courseHeading">{courseData.title}</div>
-      </div> */}
       <div className="row secondRow">
         <div className="col-md-8 pdy">
           <div className="videoBox">
-            <div className="embed-responsive embed-responsive-16by9 ">
+            <div className="embed-responsive embed-responsive-16by9">
               <iframe
                 title="title"
                 className="embed-responsive-item"
@@ -85,38 +88,35 @@ const CourseContent = () => {
             </div>
             <div>
               <div className="infoBox">
-                <h1 className="">{courseData.title}</h1>
-                <div className="lessonDescriptionBox">
-                  <h3 className="lessonDescriptionBoxTitle ">
-                    1. {courseData.lessons[0].title}
-                  </h3>
-                  <p className="lessonDescriptionBoxDescription">
-                    {courseData.lessons[0].description}
-                  </p>
-                </div>
+                <h1>{courseData.title}</h1>
+                {courseData.lessons && courseData.lessons.length > 0 && (
+                  <div className="lessonDescriptionBox">
+                    <h3 className="lessonDescriptionBoxTitle">
+                      1. {courseData.lessons[0].title}
+                    </h3>
+                    <p className="lessonDescriptionBoxDescription">
+                      {courseData.lessons[0].description}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
         <div className="col-md-4 CCaccordianBox">
-          <Accordion
-            activeKey={activeLesson}
-            onSelect={handleLessonClick}
-            alwaysOpen
-          >
-            {courseData.lessons.map((lesson, index) => (
-              <div key={index} className="accordion-item">
-                <Accordion.Item eventKey={index}>
+          <Accordion activeKey={activeLesson} onSelect={handleLessonClick}>
+            {courseData.lessons &&
+              courseData.lessons.map((lesson, index) => (
+                <Accordion.Item key={index} eventKey={index}>
                   <Accordion.Header onClick={() => handleLessonClick(index)}>
                     <div className="lesson-meta">
                       <div className="lesson-title">
-                        {index + 1}&nbsp;.&nbsp;
-                        {lesson.title}
+                        {index + 1}&nbsp;.&nbsp;{lesson.title}
                       </div>
                       <span className="lesson-duration">
                         Duration : {calculateTotalDuration(lesson.videos)}
                       </span>
-                      <span className="">
+                      <span>
                         &nbsp; /&nbsp; Total Videos : {lesson.videos.length}
                       </span>
                     </div>
@@ -174,8 +174,7 @@ const CourseContent = () => {
                     </div>
                   </Accordion.Body>
                 </Accordion.Item>
-              </div>
-            ))}
+              ))}
           </Accordion>
         </div>
       </div>

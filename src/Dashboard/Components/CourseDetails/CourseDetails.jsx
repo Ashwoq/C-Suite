@@ -1,17 +1,16 @@
 import "./CourseDetails.css";
-import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import LoadingPage from "../LoadingPage/LoadingPage";
 import { Tabs, Tab, Accordion } from "react-bootstrap";
-import CourseRecommendation from "../CourseRecomend/CourseRecommendation";
 import PaymentSuccess from "../PaymentSuccess/PaymentSuccess";
+import CourseRecommendation from "../CourseRecomend/CourseRecommendation";
 
 const CourseDetails = () => {
-  const navigate = useNavigate();
-
-  const [activeTab, setActiveTab] = useState("description");
-  const [activeLesson, setActiveLesson] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [activeLesson, setActiveLesson] = useState("");
+  const [activeTab, setActiveTab] = useState("description");
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [courseContentDetailsData, setCourseContentDetailsData] = useState({});
 
@@ -22,8 +21,10 @@ const CourseDetails = () => {
           "https://csuite-production.up.railway.app/api/courseDetail"
         );
         setCourseContentDetailsData(response.data.courses[0]);
+        setIsLoading(false);
       } catch (err) {
         console.error("Error fetching course details:", err);
+        setIsLoading(false);
       }
     };
 
@@ -57,6 +58,14 @@ const CourseDetails = () => {
   const toggleDescription = () => {
     setIsExpanded(!isExpanded);
   };
+
+  if (isLoading) {
+    return (
+      <div>
+        <LoadingPage />
+      </div>
+    );
+  }
 
   return (
     <>
