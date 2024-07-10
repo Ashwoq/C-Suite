@@ -8,8 +8,6 @@ import {
   faHome,
   faUser,
   faHeart,
-  faStar,
-  faHistory,
   faBook,
   faCog,
   faSignOutAlt,

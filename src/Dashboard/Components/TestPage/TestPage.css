@@ -9,181 +9,235 @@
 
 /*  */
 .countdown {
+  font-size: 1em;
   color: white;
 }
 
 .testPageResultsContainer {
-  text-align: left;
-  margin: 0 auto;
-  background-color: var(--primary-color);
   padding: 20px;
+  margin: 0 auto;
+  text-align: left;
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+  /* background-color: red; */
+  background-color: var(--primary-light);
+  box-shadow: 4px 8px 10px -3px rgba(0, 0, 0, 0.1);
 }
 
 .testPageResultsContainer h3 {
-  font-size: 1.5em;
-  margin-bottom: 15px;
   color: #ffffff;
+  font-size: 1.7em;
+  text-align: center;
+  margin-bottom: 15px;
+  /* background-color: blue; */
 }
 
 .testPageResult {
-  background-color: #fff;
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 15px;
+  background-color: var(--primary-bg);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .testPageResult p.question {
-  font-weight: bold;
+  font-weight: 500;
   margin-bottom: 5px;
+  /* background-color: #00ff08; */
 }
-
+/* 
 .testPageResult .answerResult {
   margin-top: 10px;
+  background-color: #00e1ff;
 }
 
 .testPageResult p {
   margin: 5px 0;
+  background-color: #ffbb00;
+} */
+
+.testPageResult .answerResult {
+  padding: 0px;
+  margin-top: 10px;
+  /* background-color: #0f6b78; */
 }
 
-/*  */
+.test-correct {
+  background-color: lightgreen;
+  border: 1px solid green;
+  color: white;
+  padding: 2px 9px;
+  border-radius: 8px;
+}
 
-.testPageHeader {
+.test-incorrect {
+  background-color: rgb(240, 128, 128);
+  border: 1px solid red;
+  color: white;
+  padding: 2px 9px;
+  border-radius: 8px;
+}
+
+.answerRow {
   display: flex;
-  padding: 20px;
-  padding-right: 0px;
-  color: #fff;
-  text-align: center;
+  padding: 3px;
+  font-size: 0.9em;
+  margin-bottom: 8px;
   align-items: center;
+  border-radius: 7px;
+  background-color: white;
+  justify-content: space-between;
+  border: 1px solid var(--primary-light);
+}
+
+.answerRow:last-child {
+  margin-bottom: 0px;
+}
+
+.values {
+  text-align: right;
+}
+
+.testPageHeaderBox {
+  display: grid;
+  padding: 10px 20px;
+  color: #fff;
+  padding-right: 0px;
+  text-align: center;
   border-radius: 10px;
   margin-bottom: 20px;
-  justify-content: space-between;
-  background-color: var(--primary-light);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  grid-template-columns: repeat(3, 1fr);
+  box-shadow: 4px 8px 10px -3px rgba(0, 0, 0, 0.1);
 }
 
-.testPageHeader div:first-child {
+.testPageHeaderBox .testPageHeader {
   display: flex;
+  width: max-content;
   align-items: center;
   border-radius: 13px;
+  margin: auto auto auto 0;
   padding: 10px 0px 10px 20px;
-  background-color: var(--primary-bg);
+  background-color: #e0bcff;
 }
 
-.testPageHeader div {
-  background-color: red;
-}
-
-.testPageHeader div:first-child h3 {
-  margin-top: 0%;
-  margin-bottom: 0%;
-  color: var(--primary-dark);
-}
-
-.testPageHeader div:first-child h4 {
+.testPageHeaderBox .testPageHeader h4 {
   margin-left: 30px;
   padding: 9px 12px;
   margin-top: 0%;
   margin-bottom: 0%;
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
-  background-color: var(--primary-dark);
+  background-color: var(--primary-color);
 }
 
-.testPageHeader div:last-child {
-  padding: 10px 10px;
+.testPageHeaderBox .testPageHeaderTimerBox {
+  width: max-content;
+  padding: 10px 15px;
+  margin: auto 0 auto auto;
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
-  background-color: var(--primary-dark);
+  background-color: var(--primary-light);
 }
 
-.testPageHeader div p {
+.testPageHeaderBox .testPageHeaderTimerBox p {
   font-size: 0.9em;
   margin: 0px auto;
   font-weight: 500;
   color: var(--primary-bg);
 }
 
+.testLimit {
+  margin: auto;
+  /* bgc */
+  /* background-color: red; */
+}
+
+.timer-countdown {
+  color: black;
+  font-size: 20px;
+}
+
 .testPageMainContainer {
   display: flex;
-  /* gap: 15px; */
   padding: 5px;
-  /* width: 80%; */
-  /* background-color: yellow; */
 }
 
 .testPageSidebar {
   width: 5%;
+  display: flex;
   padding-top: 35px;
   margin-right: -15px;
-  display: flex;
   justify-content: center;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
-  background-color: #e1c0ff;
-  border-right: 1px solid rgba(0, 0, 0, 0.21);
+  /* bgc */
+  background-color: white;
+  border-right: 1px solid var(--primary-light);
+  box-shadow: 0px 4px 6px 1px rgba(0, 0, 0, 0.1);
 }
 
 .testPageSidebar ul {
   padding: 8px 5px;
   list-style-type: none;
-  /* background-color: burlywood; */
 }
 
 .testPageSidebar ul li {
   width: 35px;
-  color: white;
+  font-weight: 500;
   margin-bottom: 12px;
   border-radius: 10px;
-  background-color: var(--primary-light);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  /* bgc */
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  box-shadow: 1px 4px 6px 1px rgba(0, 0, 0, 0.1);
 }
 
 .testPageSidebarItem {
+  cursor: pointer;
+  font-weight: 500;
   padding: 5px 10px;
   text-align: center;
-  font-weight: 500;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.614);
-  cursor: pointer;
   transition: all 0.2s;
+  border-bottom: 1px solid rgb(159, 159, 159);
 }
 
 .testPageSidebarItem:hover {
   opacity: 0.8;
+  transform: translateY(-2.5px);
 }
 
 .testPageSidebarItem.selected {
-  background-color: var(--primary-dark);
+  color: white;
+  background-color: var(--primary-color);
 }
 
 .testPageContent {
-  width: 95%;
   display: flex;
   gap: 15px;
+  width: 95%;
 }
 
 .testPageQuestionBox {
   width: 45%;
-  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-  background-color: var(--primary-bg);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  /* bgc */
+  background-color: white;
+  box-shadow: 0px 4px 6px 1px rgba(0, 0, 0, 0.1);
 }
 
 .testPageQuestionBox .testPageSpan {
   margin: 20px;
-  /* background-color: red; */
 }
 
 .testPageTotalQuestion {
   font-weight: 500;
   padding: 5px 10px;
   border-top-right-radius: 5px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.232);
+  /* bgc */
   background-color: #e0bcff;
+  border-bottom: 1px solid var(--primary-light);
 }
 
 .testAnswerHere {
@@ -194,55 +248,58 @@
 
 .testPageRHS {
   width: 55%;
-  /* background-color: red; */
+  border-radius: 5px;
+  box-shadow: 1px 4px 8px 1px rgba(0, 0, 0, 0.1);
 }
 
 .testPageQuestionContainer {
   padding-bottom: 5px;
+  background-color: white;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  background-color: white;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .testPageOptionLabel {
   display: block;
-  cursor: pointer;
   margin: 20px;
   display: flex;
-  /* align-items: center; */
-  /* width: max-content; */
-  border-radius: 5px;
+  cursor: pointer;
   padding: 5px 10px;
-  /* margin-bottom: 10px; */
+  border-radius: 5px;
+  transition: all 250ms;
   background-color: var(--primary-bg);
 }
 
+.testPageOptionLabel:hover {
+  color: white;
+  transform: translateY(-2px);
+  background-color: var(--primary-light);
+}
+
 .testPageOptionLabel input[type="radio"] {
-  /*  */
-  transform: scale(1.3);
-  outline: none;
   border: none;
+  outline: none;
   margin-right: 8px;
   position: relative;
+  transform: scale(1.3);
 }
 
 .testPageNavigationButtons {
   padding: 8px;
   display: flex;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
   justify-content: end;
   background-color: #e0bcff;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .testPageNextButton,
 .testPageSubmitButton {
-  padding: 6px 20px;
-  color: white;
   border: none;
-  border-radius: 5px;
+  color: white;
   cursor: pointer;
+  padding: 6px 20px;
+  border-radius: 5px;
   background-color: #00ff08;
 }
 
@@ -252,54 +309,40 @@
 }
 
 @media (max-width: 1125px) {
+  .timer-countdown {
+    font-size: 15px;
+  }
+
   .testPage {
     height: 100vh;
   }
 
-  /*  */
-
-  .testPageHeader {
-    gap: 10px;
-    padding: 10px 12px;
+  .testPageHeaderBox {
+    padding: 6px 8px;
     margin-bottom: 10px;
     flex-direction: column;
-    /*  */
   }
 
-  .testPageHeader div:first-child h4 {
-    font-size: 0.65em;
-    margin-left: 5px;
+  .testPageHeaderBox .testPageHeader {
+    padding: 5px 0px 5px 3px;
+    border-radius: 8px;
+  }
+
+  .testPageHeaderBox .testPageHeader h4 {
     padding: 5px;
-    /*  */
-  }
-
-  .testPageHeader div:first-child h3 {
-    font-size: 0.8em;
-    /*  */
-  }
-
-  /* .testPageHeader div {
-    background-color: red;
-  } */
-
-  .testPageHeader div:last-child {
-    width: 100%;
-    display: flex;
-    padding: 5px 10px;
-    border-radius: 7px;
-    /*  */
-  }
-
-  .testPageHeader div p {
     font-size: 0.6em;
-    margin: 0px auto;
+    margin-left: 15px;
   }
 
-  .testPageHeader div p:last-child {
-    border-left: 1px solid black;
+  .testPageHeaderBox .testPageHeaderTimerBox {
+    padding: 4px 7px;
+    border-radius: 7px;
   }
 
-  /*  */
+  .testPageHeaderBox .testPageHeaderTimerBox p {
+    line-height: 1.3em;
+    font-size: 0.55em;
+  }
 
   .testPageMainContainer {
     flex-direction: column;
