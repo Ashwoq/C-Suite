@@ -49,6 +49,7 @@ function SidebarItem({ icon, text, active, expanded, path, splMargin }) {
       className={`sidebar-item ${active ? "active" : ""} ${
         expanded ? "expanded" : "collapsed"
       }`}
+      end={true}
     >
       <FontAwesomeIcon icon={icon} className="icon" style={iconStyle} />
       <span
@@ -133,7 +134,7 @@ const Sidebar = () => {
               </span>
             </button>
             <SidebarItem
-              path={"./dash"}
+              path={"./"}
               icon={faHome}
               splMargin={true}
               text={"Dashboard"}

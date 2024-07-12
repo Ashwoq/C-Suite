@@ -13,6 +13,7 @@ const CourseContent = () => {
   const [activeLesson, setActiveLesson] = useState(null);
   const [courseData, setCourseData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [currentCourseTitle, setCurrentCourseTitle] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,6 +31,10 @@ const CourseContent = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    setCurrentCourseTitle(courseData?.title);
+  }, [courseData]);
 
   const handleLessonClick = (index) => {
     setActiveLesson(index === activeLesson ? null : index);
@@ -58,6 +63,35 @@ const CourseContent = () => {
     return testData.courses.find((course) => course.title === courseTitle);
   };
 
+  const renderContent = (lesson) => {
+    // if (lesson.type === "video") {
+    //   return (
+    //     <iframe
+    //       title="Video"
+    //       className="embed-responsive-item"
+    //       src={lesson.link}
+    //       allowFullScreen
+    //     ></iframe>
+    //   );
+    // }
+    // else if (lesson.type === "ppt") {
+    // const fileId = lesson.link.split("/d/")[1].split("/")[0];
+    const fileId =
+      "https://drive.google.com/file/d/11LZ9bwWvJMaOfTe-AMFLcbsjQeehXJbc/view"
+        .split("/d/")[1]
+        .split("/")[0];
+    const embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+    return (
+      <iframe
+        title="PPT"
+        className="embed-responsive-item"
+        src={embedUrl}
+        allowFullScreen
+      ></iframe>
+    );
+    // }
+  };
+
   if (isLoading) {
     return (
       <div>
@@ -79,12 +113,15 @@ const CourseContent = () => {
         <div className="col-md-8 pdy">
           <div className="videoBox">
             <div className="embed-responsive embed-responsive-16by9">
-              <iframe
+              {/* <iframe
                 title="title"
                 className="embed-responsive-item"
                 src="https://www.youtube.com/embed/Zj6x_7i1jYY"
                 allowFullScreen
-              ></iframe>
+              ></iframe> */}
+              {courseData.lessons &&
+                courseData.lessons.length > 0 &&
+                renderContent(courseData.lessons[0])}
             </div>
             <div>
               <div className="infoBox">
@@ -160,10 +197,26 @@ const CourseContent = () => {
                                 ]?.timeLimit ?? "Not specified"}
                               </span>
                             </div>
+                            {/* <button
+                              className="testButton"
+                              onClick={() =>
+                                // navigate(`/home/test/${index + 1}`)
+                                // navigate(`/home/test/${index + 1}`, {
+                                //   state: courseData?.title,
+                                // })
+                                navigate(`/home/test/${index + 1}`, {
+                                  state: { courseTitle: courseData?.title },
+                                })
+                              }
+                            >
+                              Take Test
+                            </button> */}
                             <button
                               className="testButton"
                               onClick={() =>
-                                navigate(`/home/test/${index + 1}`)
+                                navigate(`/home/test/${index + 1}`, {
+                                  state: { courseTitle: currentCourseTitle },
+                                })
                               }
                             >
                               Take Test

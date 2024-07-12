@@ -2,6 +2,7 @@
   display: flex;
   height: 100vh;
   padding: 20px;
+  cursor: default;
   /* align-items: center; */
   flex-direction: column;
   background-color: var(--primary-bg);
@@ -25,11 +26,36 @@
 }
 
 .testPageResultsContainer h3 {
+  display: flex;
+  justify-content: space-between;
   color: #ffffff;
   font-size: 1.7em;
   text-align: center;
   margin-bottom: 15px;
-  /* background-color: blue; */
+}
+
+.finalScore {
+  color: white;
+  font-weight: 400;
+  font-size: 0.55em;
+  padding: 8px 12px;
+  text-align: left;
+  width: max-content;
+  border-radius: 9px;
+  border: 1.5px solid green;
+  background-color: rgb(58, 214, 58);
+  color: black;
+  background-color: white;
+}
+
+.finalScore div {
+  display: flex;
+  gap: 6px;
+  justify-content: space-between;
+}
+
+.finalScore div:first-child {
+  margin-bottom: 3px;
 }
 
 .testPageResult {
@@ -43,39 +69,27 @@
 .testPageResult p.question {
   font-weight: 500;
   margin-bottom: 5px;
-  /* background-color: #00ff08; */
 }
-/* 
-.testPageResult .answerResult {
-  margin-top: 10px;
-  background-color: #00e1ff;
-}
-
-.testPageResult p {
-  margin: 5px 0;
-  background-color: #ffbb00;
-} */
 
 .testPageResult .answerResult {
   padding: 0px;
   margin-top: 10px;
-  /* background-color: #0f6b78; */
 }
 
 .test-correct {
-  background-color: lightgreen;
-  border: 1px solid green;
   color: white;
   padding: 2px 9px;
   border-radius: 8px;
+  border: 1px solid green;
+  background-color: lightgreen;
 }
 
 .test-incorrect {
-  background-color: rgb(240, 128, 128);
-  border: 1px solid red;
   color: white;
   padding: 2px 9px;
   border-radius: 8px;
+  border: 1px solid red;
+  background-color: rgb(240, 128, 128);
 }
 
 .answerRow {

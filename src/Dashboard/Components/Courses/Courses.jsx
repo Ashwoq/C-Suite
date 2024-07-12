@@ -9,6 +9,7 @@ const Courses = () => {
   const navigate = useNavigate();
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [coursesData, setCoursesData] = useState([]);
+  const [courseData, setCourseData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   //
@@ -20,6 +21,25 @@ const Courses = () => {
           "https://csuite-production.up.railway.app/api/courseList"
         );
         setCoursesData(response.data.courses);
+        console.log(response.data.courses, "lst");
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://csuite-production.up.railway.app/api/courseDetail"
+        );
+        setCourseData(response.data.courses);
+        console.log(response.data.courses, "dtl");
         setIsLoading(false);
       } catch (err) {
         console.log(err);

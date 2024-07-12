@@ -30,6 +30,7 @@ import CourseDetails from "./Dashboard/Components/CourseDetails/CourseDetails";
 import Profile from "./Dashboard/Components/Profile/Profile";
 import Enrolled from "./Dashboard/Components/Enrolled/Enrolled";
 import TestPage from "./Dashboard/Components/TestPage/TestPage";
+import Home from "./Dashboard/Components/Home/Home";
 
 function App() {
   return (
@@ -57,20 +58,13 @@ function App() {
           />
           <Route path="/finish-assessment" element={<Closelevel />} />
           <Route path="/home" element={<Dashboard />}>
-            <Route path="courses" index element={<Courses />}></Route>
-            <Route path="profile" index element={<Profile />}></Route>
-            <Route path="enrolled" index element={<Enrolled />}></Route>
-            <Route path="test/:lessonId" index element={<TestPage />} />
-            <Route
-              path="courseContent"
-              index
-              element={<CourseContent />}
-            ></Route>
-            <Route
-              path="courseDetails"
-              index
-              element={<CourseDetails />}
-            ></Route>
+            <Route index element={<Home />} />
+            <Route path="courses" element={<Courses />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="enrolled" element={<Enrolled />} />
+            <Route path="test/:lessonId" element={<TestPage />} />
+            <Route path="courseContent" element={<CourseContent />} />
+            <Route path="courseDetails" element={<CourseDetails />} />
           </Route>
         </Routes>
       </Router>
