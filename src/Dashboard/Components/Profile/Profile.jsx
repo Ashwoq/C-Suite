@@ -38,8 +38,18 @@ const Profile = () => {
     axios
       .get("https://csuite-production.up.railway.app/api/user")
       .then((response) => {
-        const data = response.data.users[0];
+        const data = response.data.users[1];
+        // console.log(response.data.users[0]._id);
         setProfileData(data);
+
+        // usid
+        const csuiteUserInfo = {
+          userID: data._id,
+          coursePurchased: data.coursePurchased || [],
+        };
+        localStorage.setItem("userInfo", JSON.stringify(csuiteUserInfo));
+        //
+
         if (data.profilePic) {
           setProfileData((prevData) => ({
             ...prevData,
@@ -165,7 +175,7 @@ const Profile = () => {
     <div className="profileContainer">
       <div className="profileBannerBox">
         <div className="profileBGBox">
-          <img src={profileData.profileBanner} alt="" />
+          <img src={profileData?.profileBanner} alt="" />
           {isEditing && (
             <label className="custom-file-upload imageBanner">
               <input
@@ -180,7 +190,7 @@ const Profile = () => {
         </div>
         <div className="profileHeader">
           <div className="profileImage">
-            <img src={profileData.profilePic} alt="Profile" className="" />
+            <img src={profileData?.profilePic} alt="Profile" className="" />
             {isEditing && (
               <label className="custom-file-upload">
                 <input
@@ -194,8 +204,8 @@ const Profile = () => {
             )}
           </div>
           <div className="profileHeaderInfo">
-            <h2 className="profileName">{profileData.name}</h2>
-            <p className="profileEmail">{profileData.email}</p>
+            <h2 className="profileName">{profileData?.name}</h2>
+            <p className="profileEmail">{profileData?.email}</p>
           </div>
           <div className="profileEditBtn">
             <button onClick={isEditing ? handleSaveClick : handleEditClick}>
@@ -207,7 +217,9 @@ const Profile = () => {
       <div className="profileContent">
         <div className="profileSection">
           <h5>General Information</h5>
-          <div className={`${inputClassName(profileData.name)} profileDetails`}>
+          <div
+            className={`${inputClassName(profileData?.name)} profileDetails`}
+          >
             <label>Name</label>
             <input
               type="text"
@@ -225,7 +237,7 @@ const Profile = () => {
             <input
               type="text"
               name="gender"
-              value={profileData.gender}
+              value={profileData?.gender}
               onChange={handleChange}
               disabled={!isEditing}
             />
@@ -237,7 +249,7 @@ const Profile = () => {
             <input
               type="text"
               name="idCard"
-              value={profileData.idCard}
+              value={profileData?.idCard}
               onChange={handleChange}
               disabled={!isEditing}
             />
@@ -249,7 +261,7 @@ const Profile = () => {
             <textarea
               type="text"
               name="address"
-              value={profileData.address}
+              value={profileData?.address}
               onChange={handleChange}
               disabled={!isEditing}
             />
@@ -263,7 +275,7 @@ const Profile = () => {
             <input
               type="number"
               name="testScore"
-              value={profileData.testScore}
+              value={profileData?.testScore}
               disabled
             />
           </div>
@@ -279,7 +291,7 @@ const Profile = () => {
             <input
               type="email"
               name="email"
-              value={profileData.email}
+              value={profileData?.email}
               onChange={handleChange}
               disabled={!isEditing}
             />
@@ -294,7 +306,7 @@ const Profile = () => {
             <input
               type="number"
               name="phoneNumber"
-              value={profileData.phoneNumber}
+              value={profileData?.phoneNumber}
               onChange={handleChange}
               disabled={!isEditing}
             />
@@ -311,7 +323,7 @@ const Profile = () => {
             <input
               type="text"
               name="companyname"
-              value={profileData.companyname}
+              value={profileData?.companyname}
               onChange={handleChange}
               disabled={!isEditing}
             />
@@ -323,7 +335,7 @@ const Profile = () => {
             <input
               type="text"
               name="position"
-              value={profileData.position}
+              value={profileData?.position}
               onChange={handleChange}
               disabled={!isEditing}
             />
@@ -335,7 +347,7 @@ const Profile = () => {
             <input
               type="url"
               name="linkedIn"
-              value={profileData.linkedIn}
+              value={profileData?.linkedIn}
               onChange={handleChange}
               disabled={!isEditing}
             />
@@ -344,7 +356,7 @@ const Profile = () => {
             <label>Bio</label>
             <textarea
               name="bio"
-              value={profileData.bio}
+              value={profileData?.bio}
               onChange={handleChange}
               disabled={!isEditing}
             />
@@ -353,55 +365,55 @@ const Profile = () => {
           <h5>Emergency Contact</h5>
           <div
             className={`${inputClassName(
-              profileData.emergencyContact.name
+              profileData.emergencyContact?.name
             )} profileDetails`}
           >
             <label>Full Name</label>
             <input
               type="text"
               name="emergencyContact.name"
-              value={profileData.emergencyContact.name}
+              value={profileData?.emergencyContact?.name}
               onChange={handleChange}
               disabled={!isEditing}
             />
           </div>
           <div
             className={`${inputClassName(
-              profileData.emergencyContact.relationship
+              profileData.emergencyContact?.relationship
             )} profileDetails`}
           >
             <label>Relationship</label>
             <input
               type="text"
               name="emergencyContact.relationship"
-              value={profileData.emergencyContact.relationship}
+              value={profileData?.emergencyContact?.relationship}
               onChange={handleChange}
               disabled={!isEditing}
             />
           </div>
           <div
             className={`${inputClassName(
-              profileData.emergencyContact.phone
+              profileData.emergencyContact?.phone
             )} profileDetails`}
           >
             <label>Phone Number</label>
             <input
               type="number"
               name="emergencyContact.phone"
-              value={profileData.emergencyContact.phone}
+              value={profileData?.emergencyContact?.phone}
               onChange={handleChange}
               disabled={!isEditing}
             />
           </div>
           <div
             className={`${inputClassName(
-              profileData.emergencyContact.address
+              profileData.emergencyContact?.address
             )} profileDetails`}
           >
             <label>Address</label>
             <textarea
               name="emergencyContact.address"
-              value={profileData.emergencyContact.address}
+              value={profileData?.emergencyContact?.address}
               onChange={handleChange}
               disabled={!isEditing}
             />

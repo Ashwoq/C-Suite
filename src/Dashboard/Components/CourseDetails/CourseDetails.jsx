@@ -1,26 +1,33 @@
 import "./CourseDetails.css";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import LoadingPage from "../LoadingPage/LoadingPage";
 import { Tabs, Tab, Accordion } from "react-bootstrap";
 import PaymentSuccess from "../PaymentSuccess/PaymentSuccess";
-import CourseRecommendation from "../CourseRecomend/CourseRecommendation";
+
+import settingsSVG from "../Assets/SVG/settings.svg";
+import lightningSVG from "../Assets/SVG/lightning.svg";
+import tickIconSVG from "../Assets/SVG/tickIcon.svg";
 
 const CourseDetails = () => {
+  const { courseId } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const [activeLesson, setActiveLesson] = useState("");
   const [activeTab, setActiveTab] = useState("description");
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [courseContentDetailsData, setCourseContentDetailsData] = useState({});
+  const courseDetailIcon = ["📘", "👥", "⏰", "🎓", "🌐", "🔑"];
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://csuite-production.up.railway.app/api/courseDetail"
+          `https://csuite-production.up.railway.app/api/courseDetail/${courseId}`
         );
-        setCourseContentDetailsData(response.data.courses[0]);
+        setCourseContentDetailsData(response.data.course);
+        // console.log(response.data.course);
         setIsLoading(false);
       } catch (err) {
         console.error("Error fetching course details:", err);
@@ -37,7 +44,7 @@ const CourseDetails = () => {
 
   const calculateTotalDuration = (videos) => {
     let totalDuration = 0;
-    videos.forEach((video) => {
+    videos?.forEach((video) => {
       totalDuration +=
         parseInt(video.duration.split(":")[0], 10) * 60 +
         parseInt(video.duration.split(":")[1], 10);
@@ -51,8 +58,14 @@ const CourseDetails = () => {
     return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
   };
 
-  const resolveSVGPath = (relativePath) => {
-    return require(`../Assets/SVG/${relativePath}`);
+  // const resolveSVGPath = (relativePath) => {
+  //   return require(`../Assets/SVG/${relativePath}`);
+  // };
+
+  const resolveSVGPath = () => {
+    const icons = [lightningSVG, settingsSVG];
+    const randomIndex = Math.floor(Math.random() * icons.length);
+    return icons[randomIndex];
   };
 
   const toggleDescription = () => {
@@ -71,7 +84,11 @@ const CourseDetails = () => {
     <>
       {paymentSuccess && (
         <>
-          <PaymentSuccess />
+          <PaymentSuccess
+            courseId={courseId}
+            price={courseContentDetailsData.price}
+            courseTitle={courseContentDetailsData.title}
+          />
         </>
       )}
       <div className="courseDetailsBox">
@@ -94,7 +111,10 @@ const CourseDetails = () => {
                 <iframe
                   title="title"
                   className="embed-responsive-item"
-                  src={courseContentDetailsData.videoUrl}
+                  src={
+                    courseContentDetailsData.videoUrl ||
+                    "https://www.youtube.com/embed/Zj6x_7i1jYY"
+                  }
                   allowFullScreen
                 ></iframe>
               </div>
@@ -106,11 +126,12 @@ const CourseDetails = () => {
                   courseContentDetailsData.whoIsThisFor.map((item, index) => (
                     <div key={index}>
                       <div className="CDLightningTxt">
-                        {item.text}
+                        {item}
+                        {/* <img className="CDLightningSVG" src={resolveSVGPath(item?.icon)} alt={item?.text} /> */}
                         <img
                           className="CDLightningSVG"
-                          src={resolveSVGPath(item.icon)}
-                          alt={item.text}
+                          src={resolveSVGPath()}
+                          alt={item}
                         />
                       </div>
                     </div>
@@ -122,10 +143,14 @@ const CourseDetails = () => {
               {courseContentDetailsData.whatYouGet &&
                 courseContentDetailsData.whatYouGet.map((item, index) => (
                   <div className="CDWhatBoxContent" key={index}>
-                    <img src={resolveSVGPath(item.icon)} alt={item.title} />
+                    {/* <img src={resolveSVGPath(item?.icon)}
+                     alt={item.title} /> */}
+                    <img src={tickIconSVG} alt={item} />
                     <div>
-                      <div className="CDItemTitle">{item.title}</div>
-                      <span>{item.description}</span>
+                      <div className="CDItemTitle">
+                        {item.title ? item.title : item}
+                      </div>
+                      <span>{item.description ? item.description : ""}</span>
                     </div>
                   </div>
                 ))}
@@ -177,49 +202,13 @@ const CourseDetails = () => {
                     {" "}
                     What you will gain after completion of the course
                   </h4>
-                  <div
-                    // style={{
-                    //   display: "flex",
-                    //   flexDirection: "row",
-                    //   flexWrap: "wrap",
-                    //   gap: "20px",
-                    // }}
-                    className="CDOverviewPills"
-                  >
+                  <div className="CDOverviewPills">
                     {courseContentDetailsData.overviewPoints &&
                       courseContentDetailsData.overviewPoints.map(
                         (point, index) => (
-                          <span
-                            key={index}
-                            className="overview-button"
-                            // style={{
-                            //   backgroundColor: "#f3e6ff",
-                            //   borderRadius: "20px",
-                            // }}
-                          >
+                          <span key={index} className="overview-button">
                             {point.heading}
                           </span>
-                        )
-                      )}
-                  </div>
-                  <h4>Recommended Courses</h4>
-                  <div
-                    // style={{
-                    //   display: "flex",
-                    //   flexDirection: "row",
-                    //   flexWrap: "wrap",
-                    //   gap: "20px",
-                    // }}
-                    className="CDRmdCourse"
-                  >
-                    {courseContentDetailsData.recommendedCourses &&
-                      courseContentDetailsData.recommendedCourses.map(
-                        (course, index) => (
-                          <CourseRecommendation
-                            key={index}
-                            title={course.title}
-                            link={course.link}
-                          />
                         )
                       )}
                   </div>
@@ -242,19 +231,19 @@ const CourseDetails = () => {
                                   <span className="CDlesson-duration">
                                     Duration:{" "}
                                     {convertToReadableDuration(
-                                      calculateTotalDuration(lesson.videos)
+                                      calculateTotalDuration(lesson?.videos)
                                     )}
                                   </span>
                                   <span className="">
                                     &nbsp;/&nbsp; Total Videos:{" "}
-                                    {lesson.videos.length}
+                                    {lesson.videos?.length}
                                   </span>
                                 </div>
                               </Accordion.Header>
                               <Accordion.Body>
                                 <div className="CDAccodrionBody">
                                   <ul className="list-group">
-                                    {lesson.videos.map((video, vidIndex) => (
+                                    {lesson.videos?.map((video, vidIndex) => (
                                       <li
                                         key={vidIndex}
                                         className="list-group-item"
@@ -321,8 +310,12 @@ const CourseDetails = () => {
                   courseContentDetailsData.courseDetails.map(
                     (detail, index) => (
                       <div key={index} className="CDCourseDetailRow">
-                        <span className="detailIcon">{detail.icon}</span>
-                        {detail.text}
+                        {/* <span className="detailIcon">{detail.icon}</span> */}
+                        <span className="detailIcon">
+                          {/* {courseDetailIcon[index]} */}
+                          {courseDetailIcon[index % courseDetailIcon.length]}
+                        </span>
+                        {detail}
                       </div>
                     )
                   )}

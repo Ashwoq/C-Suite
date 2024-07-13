@@ -258,13 +258,6 @@
   background-color: var(--primary-bg);
 }
 
-.CDRmdCourse {
-  display: grid;
-  gap: 15px;
-  place-items: center;
-  grid-template-columns: repeat(3, 1fr);
-}
-
 .CDtabBox .nav-tabs {
   margin-bottom: 20px;
   padding-bottom: 10px;
@@ -407,10 +400,6 @@
 }
 
 @media (max-width: 1125px) {
-  .CDRmdCourse {
-    gap: 15px;
-    grid-template-columns: repeat(1, 1fr);
-  }
 
   .courseDetailsBox {
     padding: 15px;

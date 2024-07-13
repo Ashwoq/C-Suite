@@ -53,13 +53,14 @@
 .cr-button {
   color: #fff;
   border: none;
+  display: grid;
+  place-content: center;
   text-align: center;
-  cursor: pointer;
-  padding: 2px;
+  padding: 8px 12px;
   font-size: 0.85em;
   position: relative;
   transition: all 250ms;
-  margin: 0 25px;
+  margin: 0 auto;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   background-color: rgba(76, 3, 210, 1);

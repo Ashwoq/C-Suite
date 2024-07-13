@@ -164,12 +164,19 @@
   transition: border-radius 0.3s ease, background-color 0.3s;
 }
 
-.CCaccordianBox .accordion-button:not(.collapsed) {
+/* .CCaccordianBox .accordion-button .accr-btn-active, */
+.CCaccordianBox .accordion-button:hover,
+.CCaccordianBox .accr-btn-active button {
   color: white;
   background-color: var(--primary-light);
   border-bottom-left-radius: 16px !important;
   border-bottom-right-radius: 16px !important;
 }
+/* 
+.CCaccordianBox .accr-btn-active button {
+  color: rgb(38, 0, 255) !important;
+  background-color: red !important;
+} */
 
 .CCaccordianBox .accordion-collapse {
   border-top-left-radius: 16px !important;
@@ -212,6 +219,24 @@
   background-color: var(--primary-bg);
 }
 
+.CCaccordianBox .accordion-body .list-group-item:hover {
+  color: white;
+  transition: all 300ms;
+  background-color: var(--primary-light);
+}
+
+.CCaccordianBox .accordion-body .list-group-item:hover .video-number a {
+  color: white;
+  transition: all 300ms;
+}
+
+.list-group-item-active,
+.CCaccordianBox .accordion-body .list-group-item-active .video-number a {
+  color: white !important;
+  transition: all 300ms;
+  background-color: var(--primary-light) !important;
+}
+
 .lesson-meta {
   padding-left: 15px;
 }
@@ -234,6 +259,7 @@
 }
 
 .list-group-item {
+  cursor: pointer;
   padding: 8px 10px;
 }
 

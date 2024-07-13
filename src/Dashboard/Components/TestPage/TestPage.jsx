@@ -276,16 +276,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./TestPage.css";
-import LoadingPage from "../LoadingPage/LoadingPage";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Timer from "./Timer";
+import LoadingPage from "../LoadingPage/LoadingPage";
+import { useParams, useNavigate } from "react-router-dom";
 
 const TestPage = () => {
-  const { lessonId } = useParams();
+  const { lessonId, courseId, courseTitle } = useParams();
+  // const { courseId } = useParams();
+  // const { courseTitle } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { courseTitle } = location.state || {};
-
+  // const location = useLocation();
+  // const { courseTitle } = location.state || {};
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
@@ -304,10 +305,14 @@ const TestPage = () => {
     const fetchTestData = async () => {
       try {
         const response = await axios.get(
-          `https://csuite-production.up.railway.app/api/tests/${lessonId}`
+          `https://csuite-production.up.railway.app/api/tests/`
         );
-        const lessonTest = response.data;
-        // console.log(response);
+        const lessonData = response.data[0].courses;
+        const lessonTest = lessonData
+          ?.find((course) => course.title === courseTitle)
+          ?.lessons.find((lesson) => lesson.lessonId === lessonId);
+        console.log(lessonTest);
+
         if (lessonTest && lessonTest.isTestAvailable) {
           setQuestions(lessonTest.questions);
           setTimeLimit(lessonTest.timeLimit);
@@ -329,7 +334,7 @@ const TestPage = () => {
         setCountdown((prevCountdown) => {
           if (prevCountdown === 1) {
             clearInterval(intervalId);
-            navigate("/home/courseContent");
+            navigate(`/home/courseContent/${courseId}`);
           }
           return prevCountdown - 1;
         });
@@ -375,21 +380,22 @@ const TestPage = () => {
       setSubmitted(true);
       setIsTestSubmitted(true);
 
-      const testScoreData = [
+      const lessonTestScoreData = [
         {
+          courseId: courseId,
           courseTitle: courseTitle,
           lessons: [
             {
-              isTestScoreSubmitted: isTestSubmitted,
-              lessonTitle: `${lessonNumber}`,
-              totalQuestions: questions.length,
+              lessonID: `${lessonNumber}`,
+              isTestSubmitted: isTestSubmitted,
               testScore: score,
+              totalQuestions: questions.length,
             },
           ],
         },
       ];
 
-      console.log(JSON.stringify(testScoreData, null, 2));
+      console.log(JSON.stringify(lessonTestScoreData, null, 2));
     }
   }, [timeOver, submitted]);
 

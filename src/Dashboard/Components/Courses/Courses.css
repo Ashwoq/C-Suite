@@ -1,4 +1,5 @@
 .main-content {
+  cursor: default;
   padding: 0px 20px 20px 20px;
 }
 
@@ -46,6 +47,15 @@
   padding: 10px;
   color: #8949ff;
   margin-bottom: 20px;
+}
+
+.cardContainer3 h3 {
+  padding: 10px 20px;
+  color: #8949ff;
+  width: max-content;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background-color: rgba(220, 220, 220, 0.707);
 }
 
 .courseContainer3 {
@@ -187,10 +197,15 @@
     padding: 0px 5px 5px 5px;
   }
 
-  .cardContainer3 h2 {
+  .cardContainer3 h2,
+  .cardContainer3 h3 {
     padding: 5px;
     font-size: large;
     margin-bottom: 10px;
+  }
+
+  .cardContainer3 h3 {
+    font-size: medium;
   }
 
   .courseLessonBox3 h5 {

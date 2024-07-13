@@ -9,11 +9,9 @@ import Statistics from "../Statistics/Statistics";
 import LoadingPage from "../LoadingPage/LoadingPage";
 import CourseRecommendation from "../CourseRecomend/CourseRecommendation";
 
-// import CourseList from "../CourseList/CourseList";
-
 function Home() {
-  const [courseContentDetailsData, setCourseContentDetailsData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [recommendedCourses, setRecommendedCourses] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,9 +19,9 @@ function Home() {
         const response = await axios.get(
           "https://csuite-production.up.railway.app/api/courseDetail"
         );
-        setCourseContentDetailsData(response.data.courses[0]);
+        const courses = response.data.courses;
+        setRecommendedCourses(courses);
         setIsLoading(false);
-        console.log(courseContentDetailsData);
       } catch (err) {
         console.error("Error fetching course details:", err);
         setIsLoading(false);
@@ -34,12 +32,13 @@ function Home() {
   }, []);
 
   if (isLoading) {
-    return (
-      <div>
-        <LoadingPage />
-      </div>
-    );
+    return <LoadingPage />;
   }
+
+  // Shuffle recommended courses
+  const shuffledCourses = [...recommendedCourses].sort(
+    () => 0.5 - Math.random()
+  );
 
   return (
     <>
@@ -51,27 +50,18 @@ function Home() {
         </div>
         <Statistics />
       </div>
-      {/* <div className="header-container">
-
-      </div> */}
-      <h4>Recommended Courses</h4>
-      <div
-      // style={{
-      //   display: "flex",
-      //   flexDirection: "row",
-      //   flexWrap: "wrap",
-      //   gap: "20px",
-      // }}
-      >
-        {courseContentDetailsData.recommendedCourses &&
-          courseContentDetailsData.recommendedCourses.map((course, index) => (
+      <div className="home-courseBox">
+        <h4>Recommended Courses</h4>
+        <div className="home-course">
+          {shuffledCourses.slice(0, 5).map((course, index) => (
             <CourseRecommendation
               key={index}
               title={course.title}
-              link={course.link}
+              courseId={course._id}
             />
           ))}
-      </div>{" "}
+        </div>
+      </div>
     </>
   );
 }
