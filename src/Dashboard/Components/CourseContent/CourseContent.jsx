@@ -89,6 +89,10 @@ const CourseContent = () => {
   //   return testData.courses.find((course) => course.title === courseTitle);
   // };
   const findCourseTestData = (courseTitle) => {
+    // console.log(
+    //   testData?.find((course) => course.title === courseTitle).lessons[0]
+    //     ?.isTestAvailable
+    // );
     return testData?.find((course) => course.title === courseTitle) ?? {};
   };
 
@@ -209,7 +213,7 @@ const CourseContent = () => {
         <div className="col-md-4 CCaccordianBox">
           <Accordion activeKey={activeLesson} onSelect={handleLessonClick}>
             {courseData?.lessons &&
-              courseData.lessons.map((lesson, index) => (
+              courseData.lessons?.map((lesson, index) => (
                 <Accordion.Item key={index} eventKey={index}>
                   <Accordion.Header
                     onClick={() => handleLessonClick(index)}
@@ -266,7 +270,7 @@ const CourseContent = () => {
                           </li>
                         ))}
                       </ul>
-                      {findCourseTestData(courseData.title)?.lessons[index]
+                      {findCourseTestData(courseData.title)?.lessons?.[index]
                         ?.isTestAvailable && (
                         <div className="testButtonBox">
                           Take a Test to Confirm Your Understanding{" "}
@@ -275,16 +279,15 @@ const CourseContent = () => {
                               <span>
                                 Total questions:{" "}
                                 {
-                                  findCourseTestData(courseData.title)?.lessons[
-                                    index
-                                  ]?.questions.length
+                                  findCourseTestData(courseData.title)
+                                    ?.lessons?.[index]?.questions.length
                                 }
                               </span>
                               <span>
                                 Time Limit:{" "}
-                                {findCourseTestData(courseData.title)?.lessons[
-                                  index
-                                ]?.timeLimit ?? "Not specified"}
+                                {findCourseTestData(courseData.title)
+                                  ?.lessons?.[index]?.timeLimit ??
+                                  "Not specified"}
                               </span>
                             </div>
                             {/* <button

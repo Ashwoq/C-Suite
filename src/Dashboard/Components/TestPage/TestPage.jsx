@@ -293,7 +293,7 @@ const TestPage = () => {
   const [submitted, setSubmitted] = useState(false);
   const [timeLimit, setTimeLimit] = useState("");
   const [unansweredQuestions, setUnansweredQuestions] = useState([]);
-  const [countdown, setCountdown] = useState(1000);
+  const [countdown, setCountdown] = useState(10);
   const [timeOver, setTimeOver] = useState(false);
   const [percentage, setPercentage] = useState(0);
   const [score, setScore] = useState(0);
