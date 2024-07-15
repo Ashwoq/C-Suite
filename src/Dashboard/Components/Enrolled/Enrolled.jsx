@@ -98,7 +98,7 @@ const Enrolled = () => {
         // Retrieve userInfo from localStorage
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
         if (userInfo) {
-          const { userID, coursePurchased } = userInfo;
+          const { coursePurchased } = userInfo;
           // console.log(coursePurchased, "coursePurchased");
 
           // Set the purchased titles

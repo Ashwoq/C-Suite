@@ -45,7 +45,7 @@ const Profile = () => {
         // usid
         const csuiteUserInfo = {
           userID: data._id,
-          coursePurchased: data.coursePurchased || [],
+          coursePurchased: data.coursePurchased.map((x) => x.courseId) || [],
         };
         localStorage.setItem("userInfo", JSON.stringify(csuiteUserInfo));
         //

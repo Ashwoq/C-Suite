@@ -126,12 +126,12 @@ const CourseDetails = () => {
                   courseContentDetailsData.whoIsThisFor.map((item, index) => (
                     <div key={index}>
                       <div className="CDLightningTxt">
-                        {item}
+                        {item.text}
                         {/* <img className="CDLightningSVG" src={resolveSVGPath(item?.icon)} alt={item?.text} /> */}
                         <img
                           className="CDLightningSVG"
                           src={resolveSVGPath()}
-                          alt={item}
+                          alt={item.text}
                         />
                       </div>
                     </div>
@@ -145,7 +145,10 @@ const CourseDetails = () => {
                   <div className="CDWhatBoxContent" key={index}>
                     {/* <img src={resolveSVGPath(item?.icon)}
                      alt={item.title} /> */}
-                    <img src={tickIconSVG} alt={item} />
+                    <img
+                      src={tickIconSVG}
+                      alt={item.title ? item.title : item}
+                    />
                     <div>
                       <div className="CDItemTitle">
                         {item.title ? item.title : item}
@@ -315,7 +318,7 @@ const CourseDetails = () => {
                           {/* {courseDetailIcon[index]} */}
                           {courseDetailIcon[index % courseDetailIcon.length]}
                         </span>
-                        {detail}
+                        {detail.text}
                       </div>
                     )
                   )}

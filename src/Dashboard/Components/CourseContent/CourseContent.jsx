@@ -14,7 +14,8 @@ const CourseContent = () => {
   const [activeLesson, setActiveLesson] = useState(null);
   const [courseData, setCourseData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [testData, setTestData] = useState([]);
+  const [userId, setUserId] = useState(true);
+  // const [testData, setTestData] = useState([]);
 
   // ethu antha lesson ah click panna change aara function ku
   const [currentCourseData, setCurrentCourseData] = useState({});
@@ -31,6 +32,14 @@ const CourseContent = () => {
         setCourseData(response.data.course);
         // console.log(response.data.course);
 
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        if (userInfo && userInfo.userID) {
+          const { userID } = userInfo;
+          setUserId(userID);
+        } else {
+          alert("Unable to fetch userID, Please go to profile / login first");
+        }
+
         setIsLoading(false);
       } catch (err) {
         console.error("Error fetching course details:", err);
@@ -46,20 +55,21 @@ const CourseContent = () => {
   //   setCurrentCourseTitle(courseData?.title);
   // }, [courseData]);
 
-  useEffect(() => {
-    const fetchTestData = async () => {
-      try {
-        const response = await axios.get(
-          "https://csuite-production.up.railway.app/api/tests/"
-        );
-        setTestData(response.data[0].courses);
-      } catch (err) {
-        console.error("Error fetching test data:", err);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchTestData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         "https://csuite-production.up.railway.app/api/tests/"
+  //       );
+  //       setTestData(response.data[0].courses);
+  //       console.log(response.data[0].courses);
+  //     } catch (err) {
+  //       console.error("Error fetching test data:", err);
+  //     }
+  //   };
 
-    fetchTestData();
-  }, []);
+  //   fetchTestData();
+  // }, []);
 
   const handleLessonClick = (index) => {
     setActiveLesson(index === activeLesson ? null : index);
@@ -88,13 +98,14 @@ const CourseContent = () => {
   // const findCourseTestData = (courseTitle) => {
   //   return testData.courses.find((course) => course.title === courseTitle);
   // };
-  const findCourseTestData = (courseTitle) => {
-    // console.log(
-    //   testData?.find((course) => course.title === courseTitle).lessons[0]
-    //     ?.isTestAvailable
-    // );
-    return testData?.find((course) => course.title === courseTitle) ?? {};
-  };
+  // const findCourseTestData = (courseTitle, lsn) => {
+  // console.log(
+  //   testData?.find((course) => course.title === courseTitle).lessons[0]
+  //     ?.isTestAvailable
+  // );
+  // return testData?.find((course) => course.title === courseTitle) ?? {};
+  //   return console.log(lsn);
+  // };
 
   // currentcourse kku ethu
   const handleCurrentContent = (data, lessonIndex, excerciseIndex) => {
@@ -114,33 +125,46 @@ const CourseContent = () => {
   };
 
   // ppt format ku
-  const renderContent = (lesson) => {
+  const renderContent = (lesson, typeManual) => {
     // if (lesson.type === "video") {
-    //   return (
-    //     <iframe
-    //       title="Video"
-    //       className="embed-responsive-item"
-    //       src={lesson.link}
-    //       allowFullScreen
-    //     ></iframe>
-    //   );
-    // }
-    // else if (lesson.type === "ppt") {
-    // const fileId = lesson.link.split("/d/")[1].split("/")[0];
-    const fileId =
-      "https://drive.google.com/file/d/11LZ9bwWvJMaOfTe-AMFLcbsjQeehXJbc/view"
-        .split("/d/")[1]
-        .split("/")[0];
-    const embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
-    return (
-      <iframe
-        title="PPT"
-        className="embed-responsive-item"
-        src={embedUrl}
-        allowFullScreen
-      ></iframe>
-    );
-    // }
+    if (typeManual === "video") {
+      return (
+        <iframe
+          title={
+            !currentCourseData.title
+              ? courseData.lessons[0].title
+              : currentCourseData.title
+          }
+          className="embed-responsive-item"
+          src={
+            courseData.videoUrl !== undefined && courseData.videoUrl !== ""
+              ? courseData.videoUrl
+              : currentCourseData.link !== undefined &&
+                currentCourseData.link !== ""
+              ? currentCourseData.link
+              : "https://www.youtube.com/embed/9DccPRe6-I8?autoplay=1&start=15"
+          }
+          allow="autoplay"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
+        ></iframe>
+      );
+    } else if (typeManual === "ppt") {
+      // const fileId = lesson.link.split("/d/")[1].split("/")[0];
+      const fileId =
+        "https://drive.google.com/file/d/11LZ9bwWvJMaOfTe-AMFLcbsjQeehXJbc/view"
+          .split("/d/")[1]
+          .split("/")[0];
+      const embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+      return (
+        <iframe
+          title="PPT"
+          className="embed-responsive-item"
+          src={embedUrl}
+          allowFullScreen
+        ></iframe>
+      );
+    }
   };
 
   if (isLoading) {
@@ -164,25 +188,9 @@ const CourseContent = () => {
         <div className="col-md-8 pdy">
           <div className="videoBox">
             <div className="embed-responsive embed-responsive-16by9">
-              <iframe
-                title={
-                  !currentCourseData.title
-                    ? courseData.lessons[0].title
-                    : currentCourseData.title
-                }
-                className="embed-responsive-item"
-                src={
-                  !currentCourseData.link
-                    ? courseData.videoUrl
-                    : currentCourseData.link
-                }
-                allow="autoplay"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              ></iframe>
-              {/* {courseData.lessons &&
+              {courseData.lessons &&
                 courseData.lessons.length > 0 &&
-                renderContent(courseData.lessons[0])} */}
+                renderContent(courseData.lessons[0], "video")}
             </div>
             <div>
               <div className="infoBox">
@@ -270,60 +278,45 @@ const CourseContent = () => {
                           </li>
                         ))}
                       </ul>
-                      {findCourseTestData(courseData.title)?.lessons?.[index]
-                        ?.isTestAvailable && (
-                        <div className="testButtonBox">
-                          Take a Test to Confirm Your Understanding{" "}
-                          <div>
-                            <div>
-                              <span>
-                                Total questions:{" "}
-                                {
-                                  findCourseTestData(courseData.title)
-                                    ?.lessons?.[index]?.questions.length
+                      {
+                        // findCourseTestData(courseData.title, lesson)?.lessons?.[
+                        //   index
+                        // ]?.isTestAvailable &&
+                        lesson.testId && (
+                          <div className="testButtonBox">
+                            <div className="testButtonInr">
+                              <div className="testButtonTxt">
+                                Take a Test to Confirm Your Understanding
+                              </div>
+                              {/* <div>
+                                <span>
+                                  Total questions:{" "}
+                                  {
+                                    findCourseTestData(courseData.title)
+                                      ?.lessons?.[index]?.questions.length
+                                  }
+                                </span>
+                                <span>
+                                  Time Limit:{" "}
+                                  {findCourseTestData(courseData.title)
+                                    ?.lessons?.[index]?.timeLimit ??
+                                    "Not specified"}
+                                </span>
+                              </div> */}
+                              <button
+                                className="testButton"
+                                onClick={() =>
+                                  navigate(
+                                    `/home/tests/${lesson.testId}/user/${userId}`
+                                  )
                                 }
-                              </span>
-                              <span>
-                                Time Limit:{" "}
-                                {findCourseTestData(courseData.title)
-                                  ?.lessons?.[index]?.timeLimit ??
-                                  "Not specified"}
-                              </span>
+                              >
+                                Take Test
+                              </button>
                             </div>
-                            {/* <button
-                              className="testButton"
-                              onClick={() =>
-                                // navigate(`/home/test/${index + 1}`)
-                                // navigate(`/home/test/${index + 1}`, {
-                                //   state: courseData?.title,
-                                // })
-                                navigate(`/home/test/${index + 1}`, {
-                                  state: { courseTitle: courseData?.title },
-                                })
-                              }
-                            >
-                              Take Test
-                            </button> */}
-                            <button
-                              className="testButton"
-                              // onClick={() =>
-                              //   navigate(`/home/test/${index + 1}`, {
-                              //     state: { courseTitle: currentCourseTitle },
-                              //   })
-                              // }
-                              onClick={() =>
-                                navigate(
-                                  `/home/test/${courseData.title}/${courseId}/${
-                                    index + 1
-                                  }`
-                                )
-                              }
-                            >
-                              Take Test
-                            </button>
                           </div>
-                        </div>
-                      )}
+                        )
+                      }
                     </div>
                   </Accordion.Body>
                 </Accordion.Item>

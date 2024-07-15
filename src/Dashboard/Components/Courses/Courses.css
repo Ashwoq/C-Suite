@@ -117,7 +117,8 @@
 .courseImageTxt3 {
   position: absolute;
   top: 55%;
-  left: 5%;
+  left: 10%;
+  right: 0%;
   z-index: 2;
   color: white;
   font-size: medium;

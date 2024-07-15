@@ -63,7 +63,8 @@ function App() {
             <Route path="profile" element={<Profile />} />
             <Route path="enrolled" element={<Enrolled />} />
             <Route
-              path="test/:courseTitle/:courseId/:lessonId"
+              path="tests/:testId/user/:userId"
+              // path="test/:courseTitle/:courseId/:lessonId"
               element={<TestPage />}
             />
             <Route path="courseContent/:courseId" element={<CourseContent />} />

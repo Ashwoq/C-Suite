@@ -62,6 +62,8 @@ const Courses = () => {
       (imagePath.startsWith("http://") || imagePath.startsWith("https://"))
     ) {
       return imagePath;
+    } else if (imagePath && imagePath.startsWith("base64")) {
+      return imgd;
     } else {
       return require(`../Assets/Images/${imagePath}`);
     }
