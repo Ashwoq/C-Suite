@@ -4,14 +4,17 @@ import "./TestPage.css";
 import Timer from "./Timer";
 import LoadingPage from "../LoadingPage/LoadingPage";
 import { useParams, useNavigate } from "react-router-dom";
+import ErrorDataFetchOverlay from "../Error/ErrorDataFetchOverlay";
 
 const TestPage = () => {
   const navigate = useNavigate();
   const { testId, userId } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [lessonData, setLessonData] = useState({});
+  const [fetchError, setFetchError] = useState(false);
   const [userData, setUserData] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [lessonID, setLessonID] = useState(null);
@@ -27,6 +30,7 @@ const TestPage = () => {
 
   useEffect(() => {
     const fetchTestData = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get(
           `https://c-suite.onrender.com/api/tests/${testId}/user/${userId}`
@@ -35,6 +39,7 @@ const TestPage = () => {
         setUserData(response.data.userTestData[0]);
         setLessonID(response.data.testData.lessonId);
         setIsUserAlreadyCompleted(response.data.userTestData[0].isCompleted);
+        setIsLoading(false);
         // console.log(
         //   response.data.userTestData[0],
         //   "userData",
@@ -46,13 +51,17 @@ const TestPage = () => {
           setQuestions(response.data.testData.questions);
           setTimeLimit(response.data.testData.timeLimit);
         } else {
-          // navigate(-1);
+          setFetchError(true);
         }
+        // navigate(-1);
+        setIsLoading(false);
 
         //
       } catch (error) {
         console.error("Error fetching test data:", error);
         // navigate(-1);
+        setIsLoading(false);
+        setFetchError(true);
       }
     };
 
@@ -186,6 +195,14 @@ const TestPage = () => {
     );
     return fullAnswer ? fullAnswer.substring(0, 33) : "";
   };
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
+
+  if (fetchError) {
+    return <ErrorDataFetchOverlay />;
+  }
 
   if (isUserAlreadyCompleted) {
     return (

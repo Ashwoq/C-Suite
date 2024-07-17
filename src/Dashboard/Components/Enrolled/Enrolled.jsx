@@ -93,7 +93,7 @@ const Enrolled = () => {
         const coursesResponse = await axios.get(
           "https://csuite-production.up.railway.app/api/courseDetail"
         );
-        const allCourses = coursesResponse.data.courses;
+        const allCourses = coursesResponse.data;
 
         // Retrieve userInfo from localStorage
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -109,7 +109,7 @@ const Enrolled = () => {
             setHasPurchasedCourses(false);
           }
 
-          // Filter courses based on purchased titles
+          // Filter courses based on purchased
           const filteredCourses = allCourses.filter((course) =>
             coursePurchased.includes(course._id)
           );
@@ -259,7 +259,7 @@ const Enrolled = () => {
                   </ul>
                   <button
                     onClick={() =>
-                      navigate(`/home/courseDetails/${course._id}`)
+                      navigate(`/home/courseContent/${course._id}`)
                     }
                     className="lessonDetailBtn3"
                   >

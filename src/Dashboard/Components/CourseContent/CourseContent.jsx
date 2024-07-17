@@ -4,24 +4,21 @@ import "./CourseContent.css";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingPage from "../LoadingPage/LoadingPage";
 import Accordion from "react-bootstrap/Accordion";
-// import testData from "../Assets/Data/TestData.json";
-// import courseData from "../Assets/Data/CourseContentDetails.json";
+import ErrorDataFetchOverlay from "../Error/ErrorDataFetchOverlay";
 
 const CourseContent = () => {
   const navigate = useNavigate();
   const { courseId } = useParams();
-
   const [activeLesson, setActiveLesson] = useState(null);
   const [courseData, setCourseData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [userId, setUserId] = useState(true);
-  // const [testData, setTestData] = useState([]);
-
-  // ethu antha lesson ah click panna change aara function ku
+  const [fetchError, setFetchError] = useState(false);
   const [currentCourseData, setCurrentCourseData] = useState({});
-
-  // ethu test page ku change pananum
-  // const [currentCourseTitle, setCurrentCourseTitle] = useState(null);
+  // nxt btn
+  const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [activeAccordion, setActiveAccordion] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,7 +26,7 @@ const CourseContent = () => {
         const response = await axios.get(
           `https://csuite-production.up.railway.app/api/courseDetail/${courseId}`
         );
-        setCourseData(response.data.course);
+        setCourseData(response.data);
         // console.log(response.data.course);
 
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -37,42 +34,23 @@ const CourseContent = () => {
           const { userID } = userInfo;
           setUserId(userID);
         } else {
-          alert("Unable to fetch userID, Please go to profile / login first");
+          setFetchError(true);
         }
 
         setIsLoading(false);
       } catch (err) {
         console.error("Error fetching course details:", err);
         setIsLoading(false);
+        setFetchError(true);
       }
     };
 
     fetchData();
   }, []);
 
-  // ethu test page ku
-  // useEffect(() => {
-  //   setCurrentCourseTitle(courseData?.title);
-  // }, [courseData]);
-
-  // useEffect(() => {
-  //   const fetchTestData = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         "https://csuite-production.up.railway.app/api/tests/"
-  //       );
-  //       setTestData(response.data[0].courses);
-  //       console.log(response.data[0].courses);
-  //     } catch (err) {
-  //       console.error("Error fetching test data:", err);
-  //     }
-  //   };
-
-  //   fetchTestData();
-  // }, []);
-
   const handleLessonClick = (index) => {
     setActiveLesson(index === activeLesson ? null : index);
+    setActiveAccordion(index === activeLesson ? null : index);
   };
 
   const calculateTotalDuration = (videos) => {
@@ -94,19 +72,6 @@ const CourseContent = () => {
     return `${parseInt(minutes, 10)}m ${parseInt(seconds, 10)}s`;
   }
 
-  // test course
-  // const findCourseTestData = (courseTitle) => {
-  //   return testData.courses.find((course) => course.title === courseTitle);
-  // };
-  // const findCourseTestData = (courseTitle, lsn) => {
-  // console.log(
-  //   testData?.find((course) => course.title === courseTitle).lessons[0]
-  //     ?.isTestAvailable
-  // );
-  // return testData?.find((course) => course.title === courseTitle) ?? {};
-  //   return console.log(lsn);
-  // };
-
   // currentcourse kku ethu
   const handleCurrentContent = (data, lessonIndex, excerciseIndex) => {
     //     {
@@ -122,6 +87,28 @@ const CourseContent = () => {
       link: "https://www.youtube.com/embed/9DccPRe6-I8?autoplay=1&start=15",
     };
     setCurrentCourseData(modifiedData);
+    // nxt btn
+    setCurrentLessonIndex(lessonIndex);
+    setCurrentVideoIndex(excerciseIndex);
+    setActiveAccordion(lessonIndex);
+  };
+
+  const handleNext = () => {
+    if (courseData.lessons) {
+      const currentLesson = courseData.lessons[currentLessonIndex];
+      if (currentVideoIndex < currentLesson.videos.length - 1) {
+        handleCurrentContent(
+          currentLesson.videos[currentVideoIndex + 1],
+          currentLessonIndex,
+          currentVideoIndex + 1
+        );
+      } else if (currentLessonIndex < courseData.lessons.length - 1) {
+        const nextLesson = courseData.lessons[currentLessonIndex + 1];
+        handleCurrentContent(nextLesson.videos[0], currentLessonIndex + 1, 0);
+      } else {
+        alert("You have completed all lessons and videos!");
+      }
+    }
   };
 
   // ppt format ku
@@ -175,6 +162,10 @@ const CourseContent = () => {
     );
   }
 
+  if (fetchError) {
+    return <ErrorDataFetchOverlay />;
+  }
+
   return (
     <div className="courseContentContainer">
       <div className="row firstRow g-0">
@@ -182,7 +173,9 @@ const CourseContent = () => {
           Back
         </button>
         <div className="courseHeading">{courseData.title}</div>
-        <button className="NextBtn">Next</button>
+        <button className="NextBtn" onClick={() => handleNext()}>
+          Next
+        </button>
       </div>
       <div className="row secondRow">
         <div className="col-md-8 pdy">
@@ -219,7 +212,7 @@ const CourseContent = () => {
           </div>
         </div>
         <div className="col-md-4 CCaccordianBox">
-          <Accordion activeKey={activeLesson} onSelect={handleLessonClick}>
+          <Accordion activeKey={activeAccordion} onSelect={handleLessonClick}>
             {courseData?.lessons &&
               courseData.lessons?.map((lesson, index) => (
                 <Accordion.Item key={index} eventKey={index}>

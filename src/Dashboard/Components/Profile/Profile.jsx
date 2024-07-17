@@ -6,6 +6,7 @@ import phoneSVG from "../Assets/SVG/phoneSVG.svg";
 import mailSVG from "../Assets/SVG/mailSVG.svg";
 import axios from "axios";
 import LoadingPage from "../LoadingPage/LoadingPage";
+import ErrorDataFetchOverlay from "../Error/ErrorDataFetchOverlay";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -33,6 +34,7 @@ const Profile = () => {
   const [selectedProfileImage, setSelectedProfileImage] = useState(null);
   const [selectedProfileBanner, setSelectedProfileBanner] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
 
   useEffect(() => {
     axios
@@ -67,6 +69,7 @@ const Profile = () => {
       .catch((error) => {
         console.error("Error fetching profile data:", error);
         setIsLoading(false);
+        setFetchError(true);
       });
   }, []);
 
@@ -162,6 +165,10 @@ const Profile = () => {
     }
     return "";
   };
+
+  if (fetchError) {
+    return <ErrorDataFetchOverlay />;
+  }
 
   if (isLoading) {
     return (

@@ -15,7 +15,12 @@
   border-radius: 20px;
   background-color: #f0f0f0;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.filterChip:hover {
+  opacity: 0.9;
+  scale: 1.03;
 }
 
 .filterChip.active {
