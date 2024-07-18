@@ -41,16 +41,23 @@ const TestPage = () => {
   // Data Fetching
   useEffect(() => {
     const fetchTestData = async () => {
-      setIsLoading(true);
       try {
         const response = await axios.get(
           `https://c-suite.onrender.com/api/tests/${testId}/user/${userId}`
         );
+
         setLessonData(response.data.testData);
-        setUserData(response.data.userTestData[0]);
+        // setUserData(response.data.userTestData[0]);
+        setUserData(
+          response.data.userTestData.find(
+            (x) => x.userId === userId && x.testId === testId
+          )
+        );
         setLessonID(response.data.testData.lessonId);
-        setIsUserAlreadyCompleted(response.data.userTestData[0].isCompleted);
-        setIsLoading(false);
+        const firstMatch = response.data.userTestData.find(
+          (x) => x.userId === userId && x.testId === testId
+        );
+        setIsUserAlreadyCompleted(firstMatch);
 
         if (response.data.testData && response.data.testData.isTestAvailable) {
           setQuestions(response.data.testData.questions);
@@ -132,14 +139,17 @@ const TestPage = () => {
         );
         if (response.data.success) {
           // console.log("Test submitted successfully:", response.data);
+          setIsLoading(false);
           setIsTestSubmitted(true);
         } else {
+          setFetchError(true);
           console.error("Failed to submit test:", response.data.message);
         }
       } catch (error) {
+        setFetchError(true);
         console.error("Error submitting test:", error);
       }
-
+      setIsLoading(false);
       setSubmitted(true);
     }
   };
