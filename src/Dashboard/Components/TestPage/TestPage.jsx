@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "./TestPage.css";
+import axios from "axios";
 import Timer from "./Timer";
 import LoadingPage from "../LoadingPage/LoadingPage";
 import { useParams, useNavigate } from "react-router-dom";
@@ -9,25 +9,36 @@ import ErrorDataFetchOverlay from "../Error/ErrorDataFetchOverlay";
 const TestPage = () => {
   const navigate = useNavigate();
   const { testId, userId } = useParams();
-  const [isLoading, setIsLoading] = useState(true);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [questions, setQuestions] = useState([]);
-  const [answers, setAnswers] = useState({});
+
+  // Datas
   const [lessonData, setLessonData] = useState({});
-  const [fetchError, setFetchError] = useState(false);
   const [userData, setUserData] = useState({});
-  const [submitted, setSubmitted] = useState(false);
-  const [lessonID, setLessonID] = useState(null);
-  const [timeLimit, setTimeLimit] = useState("");
-  const [unansweredQuestions, setUnansweredQuestions] = useState([]);
-  const [countdown, setCountdown] = useState(1000);
-  const [timeOver, setTimeOver] = useState(false);
-  const [percentage, setPercentage] = useState(0);
+
+  // Sending Data
   const [score, setScore] = useState(0);
-  const [viewedQuestions, setViewedQuestions] = useState([0]);
-  const [isTestSubmitted, setIsTestSubmitted] = useState(false);
+  const [answers, setAnswers] = useState({});
+  const [lessonID, setLessonID] = useState(null);
+  const [questions, setQuestions] = useState([]);
+  const [percentage, setPercentage] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
   const [isUserAlreadyCompleted, setIsUserAlreadyCompleted] = useState(false);
 
+  // Error
+  const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
+
+  // Time
+  const [timeLimit, setTimeLimit] = useState("");
+  const [countdown, setCountdown] = useState(10);
+  const [timeOver, setTimeOver] = useState(false);
+
+  // Other
+  const [viewedQuestions, setViewedQuestions] = useState([0]);
+  const [isTestSubmitted, setIsTestSubmitted] = useState(false);
+  const [unansweredQuestions, setUnansweredQuestions] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
+  // Data Fetching
   useEffect(() => {
     const fetchTestData = async () => {
       setIsLoading(true);
@@ -40,12 +51,6 @@ const TestPage = () => {
         setLessonID(response.data.testData.lessonId);
         setIsUserAlreadyCompleted(response.data.userTestData[0].isCompleted);
         setIsLoading(false);
-        // console.log(
-        //   response.data.userTestData[0],
-        //   "userData",
-        //   response.data.testData,
-        //   response.data.userTestData[0].isCompleted
-        // );
 
         if (response.data.testData && response.data.testData.isTestAvailable) {
           setQuestions(response.data.testData.questions);
@@ -53,13 +58,9 @@ const TestPage = () => {
         } else {
           setFetchError(true);
         }
-        // navigate(-1);
         setIsLoading(false);
-
-        //
       } catch (error) {
         console.error("Error fetching test data:", error);
-        // navigate(-1);
         setIsLoading(false);
         setFetchError(true);
       }
@@ -68,6 +69,7 @@ const TestPage = () => {
     fetchTestData();
   }, [testId, userId, navigate, isUserAlreadyCompleted]);
 
+  // Stoppin that timer when submitted
   useEffect(() => {
     if (submitted) {
       const intervalId = setInterval(() => {
@@ -79,7 +81,6 @@ const TestPage = () => {
           return prevCountdown - 1;
         });
       }, 1000);
-
       return () => clearInterval(intervalId);
     }
   }, [submitted, navigate]);
@@ -113,16 +114,15 @@ const TestPage = () => {
       setUnansweredQuestions(unanswered);
       alert("Please answer all questions before submitting.");
     } else {
-      calculateScore(); // Ensure the score is calculated before submitting
-
+      calculateScore();
       const submissionData = {
         userId,
         testId,
-        lessonId: lessonID,
         answers,
-        score, // Include the calculated score
-        totalQuestions: questions.length,
+        score,
         isCompleted: true,
+        lessonId: lessonID,
+        totalQuestions: questions.length,
       };
 
       try {
@@ -149,23 +149,6 @@ const TestPage = () => {
       calculateScore();
       setSubmitted(true);
       setIsTestSubmitted(true);
-
-      // const lessonTestScoreData = [
-      //   {
-      //     // courseId: courseId,
-      //     // courseTitle: courseTitle,
-      //     lessons: [
-      //       {
-      //         lessonID: lessonID,
-      //         isTestSubmitted: isTestSubmitted,
-      //         testScore: score,
-      //         totalQuestions: questions.length,
-      //       },
-      //     ],
-      //   },
-      // ];
-
-      // console.log(JSON.stringify(lessonTestScoreData, null, 2));
     }
   }, [timeOver, submitted]);
 

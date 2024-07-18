@@ -1,140 +1,58 @@
 import React, { useState, useEffect } from "react";
-import "../Courses/Courses.css";
 import axios from "axios";
-import imgd from "../Assets/Images/imagenotxt2.png";
+import "../Courses/Courses.css";
 import { useNavigate } from "react-router-dom";
+import imgd from "../Assets/Images/imagenotxt2.png";
 import LoadingPage from "../LoadingPage/LoadingPage";
-// import coursesData from "../Assets/Data/CourseList.json";
+import ErrorDataFetchOverlay from "../Error/ErrorDataFetchOverlay";
 
 const Enrolled = () => {
   const navigate = useNavigate();
-  const [selectedFilters, setSelectedFilters] = useState([]);
-  const [coursesData, setCoursesData] = useState([]);
-  // const [coursePurchasedTitle, setCoursePurchasedTitle] = useState(true);
-  const [hasPurchasedCourses, setHasPurchasedCourses] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [allLessons, setAllLessons] = useState([]);
+  const [coursesData, setCoursesData] = useState([]);
+  const [fetchError, setFetchError] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState([]);
+  const [hasPurchasedCourses, setHasPurchasedCourses] = useState(true);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       // Fetch all courses
-  //       const response = await axios.get(
-  //         "https://csuite-production.up.railway.app/api/courseList"
-  //       );
-  //       const allCourses = response.data.courses;
-
-  //       // Fetch coursePurchasedTitle
-  //       const responseUser = await axios.get(
-  //         "https://csuite-production.up.railway.app/api/user"
-  //       );
-  //       const purchasedTitle = responseUser.data.users[0].coursePurchased;
-  //       setCoursePurchasedTitle(purchasedTitle);
-
-  //       // Filter courses based on purchased titles
-  //       const filteredCourses = allCourses.filter((course) =>
-  //         purchasedTitle.includes(course.title)
-  //       );
-  //       setCoursesData(filteredCourses);
-
-  //       setIsLoading(false);
-  //     } catch (err) {
-  //       console.log(err);
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
-  //
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const [coursesResponse, userResponse] = await Promise.all([
-  //         axios.get(
-  //           "https://csuite-production.up.railway.app/api/courseDetail"
-  //         ),
-  //         axios.get("https://csuite-production.up.railway.app/api/user"),
-  //       ]);
-
-  //       const allCourses = coursesResponse.data.courses;
-  //       const purchasedTitles = userResponse.data.users[2].coursePurchased;
-  //       console.log(userResponse.data.users[2].coursePurchased);
-  //       setCoursePurchasedTitle(purchasedTitles);
-
-  //       const filteredCourses = allCourses.filter((course) =>
-  //         purchasedTitles.includes(course._id)
-  //       );
-  //       console.log(
-  //         filteredCourses,
-  //         "fil",
-  //         allCourses,
-  //         "alco",
-  //         purchasedTitles,
-  //         "pur"
-  //       );
-
-  //       setCoursesData(filteredCourses);
-  //       setIsLoading(false);
-  //     } catch (error) {
-  //       alert("Failed to fetch data. Please try again later.");
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
+  // Data Fetching
   useEffect(() => {
     const fetchData = async () => {
       try {
         const coursesResponse = await axios.get(
           "https://csuite-production.up.railway.app/api/courseDetail"
         );
+
         const allCourses = coursesResponse.data;
 
-        // Retrieve userInfo from localStorage
+        // isUserLogin ?
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
         if (userInfo) {
           const { coursePurchased } = userInfo;
-          // console.log(coursePurchased, "coursePurchased");
 
-          // Set the purchased titles
-          // setCoursePurchasedTitle(coursePurchased);
-
-          // Check if there are any purchased courses
+          // Checking course vangiyacha ?
           if (coursePurchased.length === 0) {
             setHasPurchasedCourses(false);
           }
 
-          // Filter courses based on purchased
+          // Filtering
           const filteredCourses = allCourses.filter((course) =>
             coursePurchased.includes(course._id)
           );
-          // console.log(
-          //   filteredCourses,
-          //   "filteredCourses",
-          //   allCourses,
-          //   "allCourses",
-          //   coursePurchased,
-          //   "coursePurchased"
-          // );
-
           setCoursesData(filteredCourses);
         } else {
-          alert("User not logged in");
+          setFetchError(true);
+          alert("User not logged in, Go to Profile page");
           console.log("No user info found in localStorage");
         }
 
         setIsLoading(false);
+        setFetchError(false);
       } catch (error) {
-        alert("Failed to fetch data. Please try again later.");
+        setFetchError(true);
         setIsLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
@@ -149,12 +67,11 @@ const Enrolled = () => {
         });
       });
 
-      // Shuffle the lessons array
+      // Random
       for (let i = lessons.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [lessons[i], lessons[j]] = [lessons[j], lessons[i]];
       }
-
       return lessons.slice(0, 10);
     };
 
@@ -163,17 +80,36 @@ const Enrolled = () => {
     }
   }, [coursesData]);
 
-  const resolveImagePath = (relativePath) => {
-    return require(`../Assets/Images/${relativePath}`);
+  const resolveImagePath = (imagePath) => {
+    if (
+      imagePath &&
+      (imagePath.startsWith("http://") || imagePath.startsWith("https://"))
+    ) {
+      return imagePath;
+    } else if (imagePath && imagePath.startsWith("base64")) {
+      return imgd;
+    } else {
+      try {
+        return require(`../Assets/Images/${imagePath}`);
+      } catch (error) {
+        return imgd;
+      }
+    }
   };
 
   const filterCourses = (filters) => {
-    if (filters.length === 0) {
-      return coursesData;
-    } else {
-      return coursesData.filter((course) =>
-        course.lessons.some((lesson) => filters.includes(lesson.title))
-      );
+    try {
+      if (filters.length === 0) {
+        return coursesData;
+      } else {
+        return coursesData.filter((course) =>
+          course.lessons.some((lesson) => filters.includes(lesson.title))
+        );
+      }
+    } catch (err) {
+      console.log(err);
+      setFetchError(true);
+      return [];
     }
   };
 
@@ -201,6 +137,10 @@ const Enrolled = () => {
         <LoadingPage />
       </div>
     );
+  }
+
+  if (fetchError) {
+    return <ErrorDataFetchOverlay />;
   }
 
   return (
