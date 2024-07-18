@@ -19,7 +19,7 @@ function Home() {
         const response = await axios.get(
           "https://csuite-production.up.railway.app/api/courseDetail"
         );
-        const courses = response.data.courses;
+        const courses = response.data;
         setRecommendedCourses(courses);
         setIsLoading(false);
       } catch (err) {
