@@ -47,7 +47,6 @@ const Enrolled = () => {
         }
 
         setIsLoading(false);
-        setFetchError(false);
       } catch (error) {
         setFetchError(true);
         setIsLoading(false);

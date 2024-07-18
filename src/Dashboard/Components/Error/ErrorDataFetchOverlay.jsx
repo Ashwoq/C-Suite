@@ -9,6 +9,10 @@ const ErrorDataFetchOverlay = () => {
     navigate("/home");
   };
 
+  const handleRedirectProfile = () => {
+    navigate("/home/profile");
+  };
+
   const handleReload = () => {
     window.location.reload();
   };
@@ -21,6 +25,9 @@ const ErrorDataFetchOverlay = () => {
       <div className="button-group">
         <button className="error-button" onClick={handleRedirect}>
           Go to Home
+        </button>
+        <button className="error-button" onClick={handleRedirectProfile}>
+          Go to Profile
         </button>
         <button className="reload-button" onClick={handleReload}>
           Reload
