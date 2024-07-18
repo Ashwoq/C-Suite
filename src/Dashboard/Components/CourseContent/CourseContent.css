@@ -13,14 +13,25 @@
 .firstRow {
   width: 100%;
   display: flex;
+  gap: 20px;
   align-items: center;
-  flex-direction: row;
   padding: 16px 18px;
   margin-bottom: 15px;
   border-radius: 10px;
   background-color: white;
-  justify-content: space-between;
   box-shadow: 4px 8px 10px -3px rgba(0, 0, 0, 0.1);
+}
+
+.courseContentHeader {
+  display: flex;
+  flex: 6;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.courseContentProgressBar {
+  flex: 3;
 }
 
 .courseHeading {

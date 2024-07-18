@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import LoadingPage from "../LoadingPage/LoadingPage";
 import Accordion from "react-bootstrap/Accordion";
 import ErrorDataFetchOverlay from "../Error/ErrorDataFetchOverlay";
+import ProgressBar from "../ProgressBar/ProgressBar";
 
 const CourseContent = () => {
   const navigate = useNavigate();
@@ -17,8 +18,11 @@ const CourseContent = () => {
   const [currentCourseData, setCurrentCourseData] = useState({});
   // nxt btn
   const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(-1);
   const [activeAccordion, setActiveAccordion] = useState(null);
+
+  // progress
+  const [completedExercises, setCompletedExercises] = useState(new Set());
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,7 +76,7 @@ const CourseContent = () => {
     return `${parseInt(minutes, 10)}m ${parseInt(seconds, 10)}s`;
   }
 
-  // currentcourse kku ethu
+  // currentcourse kkaaga ethu
   const handleCurrentContent = (data, lessonIndex, excerciseIndex) => {
     //     {
     //     "title": "Change Management Essentials",
@@ -80,6 +84,17 @@ const CourseContent = () => {
     //     "duration": "18:30",
     //     "notes": "This video provides an overview of change management principles and strategies to manage transitions smoothly."
     // }
+
+    // progress bar kaaga below
+    const exerciseKey = `${lessonIndex}-${excerciseIndex}`;
+    setCompletedExercises((prev) => {
+      const updatedSet = new Set(prev);
+      updatedSet.add(exerciseKey);
+      return updatedSet;
+    });
+
+    // progress bar kaaga above
+
     const modifiedData = {
       ...data,
       excerciseNo: excerciseIndex + 1,
@@ -96,7 +111,10 @@ const CourseContent = () => {
   const handleNext = () => {
     if (courseData.lessons) {
       const currentLesson = courseData.lessons[currentLessonIndex];
-      if (currentVideoIndex < currentLesson.videos.length - 1) {
+
+      if (currentLessonIndex === 0 && currentVideoIndex === -1) {
+        handleCurrentContent(currentLesson.videos[0], currentLessonIndex, 0);
+      } else if (currentVideoIndex < currentLesson.videos.length - 1) {
         handleCurrentContent(
           currentLesson.videos[currentVideoIndex + 1],
           currentLessonIndex,
@@ -106,12 +124,47 @@ const CourseContent = () => {
         const nextLesson = courseData.lessons[currentLessonIndex + 1];
         handleCurrentContent(nextLesson.videos[0], currentLessonIndex + 1, 0);
       } else {
-        alert("You have completed all lessons and videos!");
+        const totalExercises = courseData.lessons.reduce(
+          (total, lesson) => total + lesson.videos.length,
+          0
+        );
+        if (completedExercises.size === totalExercises) {
+          alert("Congratulations! You have completed the course!");
+        } else {
+          alert("There are few lessons you need to complete!");
+        }
       }
     }
   };
 
-  // ppt format ku
+  // const handleNext = () => {
+  //   if (courseData.lessons) {
+  //     const currentLesson = courseData.lessons[currentLessonIndex];
+  //     if (currentVideoIndex < currentLesson.videos.length - 1) {
+  //       handleCurrentContent(
+  //         currentLesson.videos[currentVideoIndex + 1],
+  //         currentLessonIndex,
+  //         currentVideoIndex + 1
+  //       );
+  //     } else if (currentLessonIndex < courseData.lessons.length - 1) {
+  //       const nextLesson = courseData.lessons[currentLessonIndex + 1];
+  //       handleCurrentContent(nextLesson.videos[0], currentLessonIndex + 1, 0);
+  //     } else {
+  //       // Check if all exercises are completed
+  //       const totalExercises = courseData.lessons.reduce(
+  //         (total, lesson) => total + lesson.videos.length,
+  //         0
+  //       );
+  //       if (completedExercises.size === totalExercises) {
+  //         alert("Congratulations! You have completed the course!");
+  //       } else {
+  //         alert("There are few lessons you need to complete!");
+  //       }
+  //     }
+  //   }
+  // };
+
+  // ppt format kaaga
   const renderContent = (lesson, typeManual) => {
     // if (lesson.type === "video") {
     if (typeManual === "video") {
@@ -154,6 +207,18 @@ const CourseContent = () => {
     }
   };
 
+  // progress bar kaaga
+  const calculateProgress = () => {
+    const totalExercises = courseData.lessons?.reduce(
+      (total, lesson) => total + lesson.videos.length,
+      0
+    );
+    const progress =
+      totalExercises > 0 ? (completedExercises.size / totalExercises) * 100 : 0;
+
+    return progress;
+  };
+
   if (isLoading) {
     return (
       <div>
@@ -169,13 +234,18 @@ const CourseContent = () => {
   return (
     <div className="courseContentContainer">
       <div className="row firstRow g-0">
-        <button className="BackBtn" onClick={() => navigate(-1)}>
-          Back
-        </button>
-        <div className="courseHeading">{courseData.title}</div>
-        <button className="NextBtn" onClick={() => handleNext()}>
-          Next
-        </button>
+        <div className="courseContentHeader">
+          <button className="BackBtn" onClick={() => navigate(-1)}>
+            Back
+          </button>
+          <div className="courseHeading">{courseData.title}</div>
+          <button className="NextBtn" onClick={() => handleNext()}>
+            Next
+          </button>
+        </div>
+        <div className="courseContentProgressBar">
+          <ProgressBar progress={calculateProgress()} />
+        </div>{" "}
       </div>
       <div className="row secondRow">
         <div className="col-md-8 pdy">
