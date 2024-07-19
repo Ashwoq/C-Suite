@@ -236,23 +236,69 @@
   background-color: var(--primary-light);
 }
 
-.CCaccordianBox .accordion-body .list-group-item:hover .video-number a {
+/* .CCaccordianBox .accordion-body .list-group-item:hover .video-number a 
+{
   color: white;
   transition: all 300ms;
+} */
+
+.list-group-item-active {
+  transition: all 300ms;
+  color: white !important;
+  background-color: var(--primary-light) !important;
+  /* background-color: red !important; */
 }
 
-.list-group-item-active,
-.CCaccordianBox .accordion-body .list-group-item-active .video-number a {
-  color: white !important;
+.CCaccordianBox .accordion-body .list-group-item-active .video-number a,
+.CCaccordianBox .accordion-body .list-group-item:hover .video-number a {
   transition: all 300ms;
-  background-color: var(--primary-light) !important;
+  color: white !important;
 }
+
+.video-number {
+  display: flex;
+  /* background-color: red; */
+}
+
+.content-watched {
+  margin-left: auto;
+  width: 19px;
+  height: auto;
+  transform: translateY(8px);
+  transition: all 0.3s ease;
+  animation: bounce 0.3s;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-10px);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(8px);
+    opacity: 1;
+  }
+}
+
+/* 
+COMPLETED LESSON CSS DA ETHU REMOVE PANATHA LATER USE AAGUM
+.completedLesson,
+.CCaccordianBox .accordion-body .completedLesson .video-number a {
+  color: white !important;
+  background-color: #d3abf9 !important;
+} */
 
 .lesson-meta {
+  width: 92%;
   padding-left: 15px;
 }
 
 .lesson-title {
+  display: flex;
   font-size: 1.1em;
   font-weight: 450;
   margin-bottom: 5px;
