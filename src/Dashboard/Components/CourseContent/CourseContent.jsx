@@ -210,7 +210,7 @@ const CourseContent = () => {
   // progress bar kaaga
   const calculateProgress = () => {
     const totalExercises = courseData.lessons?.reduce(
-      (total, lesson) => total + lesson.videos.length,
+      (total, lesson) => total + lesson.videos?.length,
       0
     );
     const progress =
