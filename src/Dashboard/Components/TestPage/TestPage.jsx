@@ -42,21 +42,27 @@ const TestPage = () => {
   useEffect(() => {
     const fetchTestData = async () => {
       try {
+        const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+
         const response = await axios.get(
-          `https://c-suite.onrender.com/api/tests/${testId}/user/${userId}`
+          `${apiBaseUrl}/tests/${testId}/user/${userId}`
         );
 
         setLessonData(response.data.testData);
         // setUserData(response.data.userTestData[0]);
-        setUserData(
-          response.data.userTestData.find(
-            (x) => x.userId === userId && x.testId === testId
-          )
-        );
+        // console.log(response.data.userTestData);
+        setUserData(response.data.userTestData);
+        // console.log(response.data.userTestData);
+        // setUserData(
+        //   response.data.userTestData.find(
+        //     (x) => x.userId === userId && x.testId === testId
+        //   )
+        // );
         setLessonID(response.data.testData.lessonId);
-        const firstMatch = response.data.userTestData.find(
-          (x) => x.userId === userId && x.testId === testId
-        );
+        // const firstMatch = response.data.userTestData.find(
+        //   (x) => x.userId === userId && x.testId === testId
+        // );
+        const firstMatch = response.data.userTestData.isCompleted;
         setIsUserAlreadyCompleted(firstMatch);
 
         if (response.data.testData && response.data.testData.isTestAvailable) {
@@ -74,7 +80,7 @@ const TestPage = () => {
     };
 
     fetchTestData();
-  }, [testId, userId, navigate, isUserAlreadyCompleted]);
+  }, [testId, userId, isUserAlreadyCompleted]);
 
   // Stoppin that timer when submitted
   useEffect(() => {
@@ -125,16 +131,20 @@ const TestPage = () => {
       const submissionData = {
         userId,
         testId,
-        answers,
-        score,
+        // answers,
         isCompleted: true,
-        lessonId: lessonID,
+        score: score,
+        // lessonId: lessonID,
         totalQuestions: questions.length,
       };
 
+      console.log(submissionData, "submitted");
+
       try {
+        const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+
         const response = await axios.post(
-          "https://c-suite.onrender.com/api/tests/submittest",
+          `${apiBaseUrl}/tests/submittest`,
           submissionData
         );
         if (response.data.success) {
@@ -170,6 +180,7 @@ const TestPage = () => {
       }
     });
     setPercentage((correctAnswers / questions.length) * 100);
+    console.log(score, "score");
     setScore(correctAnswers);
   };
 
@@ -210,13 +221,13 @@ const TestPage = () => {
               <div className="scoreDetails">
                 <span>Your Score:</span>
                 <span>
-                  {userData.score}/{userData.totalQuestions}
+                  {userData?.score}/{userData?.totalQuestions}
                 </span>
               </div>
               <div className="percentageDetails">
                 <span>Percentage:</span>{" "}
                 <span>
-                  {((userData.score / userData.totalQuestions) * 100).toFixed(
+                  {((userData?.score / userData?.totalQuestions) * 100).toFixed(
                     2
                   )}
                   %

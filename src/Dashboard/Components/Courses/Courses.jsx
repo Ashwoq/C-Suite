@@ -17,9 +17,9 @@ const Courses = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "https://csuite-production.up.railway.app/api/courseDetail/"
-        );
+        const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+
+        const response = await axios.get(`${apiBaseUrl}/courseDetail/`);
         setCoursesData(response.data);
         setIsLoading(false);
       } catch (err) {

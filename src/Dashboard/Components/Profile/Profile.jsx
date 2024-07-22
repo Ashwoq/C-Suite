@@ -37,8 +37,10 @@ const Profile = () => {
   const [fetchError, setFetchError] = useState(false);
 
   useEffect(() => {
+    const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+
     axios
-      .get("https://csuite-production.up.railway.app/api/user")
+      .get(`${apiBaseUrl}/user`)
       .then((response) => {
         const data = response.data.users[1];
         // console.log(response.data.users[0]._id);
@@ -118,8 +120,10 @@ const Profile = () => {
     }
 
     try {
+      const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+
       const response = await axios.put(
-        `https://csuite-production.up.railway.app/api/user/${profileData._id}`,
+        `${apiBaseUrl}/user/${profileData._id}`,
         formData
       );
 

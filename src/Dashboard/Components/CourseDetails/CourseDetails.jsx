@@ -15,6 +15,7 @@ const CourseDetails = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const [activeLesson, setActiveLesson] = useState("");
+  const [selectedIcon, setSelectedIcon] = useState(null);
   const [activeTab, setActiveTab] = useState("description");
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [courseContentDetailsData, setCourseContentDetailsData] = useState({});
@@ -24,8 +25,10 @@ const CourseDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+
         const response = await axios.get(
-          `https://csuite-production.up.railway.app/api/courseDetail/${courseId}`
+          `${apiBaseUrl}/courseDetail/${courseId}`
         );
         setCourseContentDetailsData(response.data);
         // console.log(response.data.price);
@@ -41,35 +44,46 @@ const CourseDetails = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const icons = [settingsSVG, lightningSVG];
+    const randomIndex = Math.floor(Math.random() * icons.length);
+    setSelectedIcon(icons[randomIndex]);
+  }, []);
+
   const handleLessonClick = (index) => {
     setActiveLesson(index === activeLesson ? "" : index);
   };
 
   const calculateTotalDuration = (videos) => {
-    let totalDuration = 0;
+    let totalSeconds = 0;
     videos?.forEach((video) => {
-      totalDuration +=
-        parseInt(video.duration.split(":")[0], 10) * 60 +
-        parseInt(video.duration.split(":")[1], 10);
+      if (video.duration) {
+        const timeComponents = video.duration.split(":").map(Number);
+        totalSeconds += timeComponents[0] * 60 + timeComponents[1];
+      }
     });
-    return totalDuration;
+
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${hours > 0 ? `${hours}h ` : ""}${minutes}m ${seconds}s`;
   };
 
-  const convertToReadableDuration = (duration) => {
-    const minutes = Math.floor(duration / 60);
-    const seconds = duration % 60;
-    return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
-  };
+  function convertToReadableDuration(duration) {
+    const [minutes, seconds] = duration.split(":");
+    return `${parseInt(minutes, 10)}m ${parseInt(seconds, 10)}s`;
+  }
 
   // const resolveSVGPath = (relativePath) => {
   //   return require(`../Assets/SVG/${relativePath}`);
   // };
 
-  const resolveSVGPath = () => {
-    const icons = [lightningSVG, settingsSVG];
-    const randomIndex = Math.floor(Math.random() * icons.length);
-    return icons[randomIndex];
-  };
+  // const resolveSVGPath = () => {
+  //   const icons = [lightningSVG, settingsSVG];
+  //   const randomIndex = Math.floor(Math.random() * icons.length);
+  //   return icons[randomIndex];
+  // };
 
   const toggleDescription = () => {
     setIsExpanded(!isExpanded);
@@ -103,9 +117,15 @@ const CourseDetails = () => {
           <div className="CDHeaderIntroVideo">
             <div className="embed-responsive-16by9">
               <iframe
-                title="title"
+                title="intro video title 1"
                 className="embed-responsive-item"
-                src="https://www.youtube.com/embed/Zj6x_7i1jYY"
+                src={
+                  courseContentDetailsData?.videoUrl === "http://yourvideo.url"
+                    ? "https://www.youtube.com/embed/9DccPRe6-I8?autoplay=1&start=15"
+                    : courseContentDetailsData?.videoUrl
+                }
+                allow="autoplay"
+                referrerPolicy="strict-origin-when-cross-origin"
                 allowFullScreen
               ></iframe>
             </div>
@@ -116,12 +136,20 @@ const CourseDetails = () => {
             <div className="CDvideoBox">
               <div className="embed-responsive embed-responsive-16by9">
                 <iframe
-                  title="title"
+                  title="intro video title 2"
                   className="embed-responsive-item"
+                  // src={
+                  //   courseContentDetailsData?.videoUrl ||
+                  //   "https://www.youtube.com/embed/9DccPRe6-I8?autoplay=1&start=15"
+                  // }
                   src={
-                    courseContentDetailsData?.videoUrl ||
-                    "https://www.youtube.com/embed/Zj6x_7i1jYY"
+                    courseContentDetailsData?.videoUrl ===
+                    "http://yourvideo.url"
+                      ? "https://www.youtube.com/embed/9WMqKhAcrpI?autoplay=1&start=0"
+                      : courseContentDetailsData?.videoUrl
                   }
+                  allow="autoplay"
+                  referrerPolicy="strict-origin-when-cross-origin"
                   allowFullScreen
                 ></iframe>
               </div>
@@ -137,7 +165,7 @@ const CourseDetails = () => {
                         {/* <img className="CDLightningSVG" src={resolveSVGPath(item?.icon)} alt={item?.text} /> */}
                         <img
                           className="CDLightningSVG"
-                          src={resolveSVGPath()}
+                          src={selectedIcon}
                           alt={item?.text}
                         />
                       </div>
@@ -183,21 +211,21 @@ const CourseDetails = () => {
                     {isExpanded
                       ? courseContentDetailsData?.description
                       : courseContentDetailsData?.description
-                      ? courseContentDetailsData?.description
-                          .split("\n")
+                          ?.split("\n")
                           .slice(0, 1)
-                          .join(" ")
-                      : ""}
+                          .join(" ")}
 
-                    {!isExpanded && (
-                      <span
-                        className="read-more-link text-primary px-1"
-                        onClick={toggleDescription}
-                        style={{ cursor: "pointer" }}
-                      >
-                        Read More
-                      </span>
-                    )}
+                    {courseContentDetailsData?.description?.split("\n").length >
+                      1 &&
+                      !isExpanded && (
+                        <span
+                          className="read-more-link text-primary px-1"
+                          onClick={toggleDescription}
+                          style={{ cursor: "pointer" }}
+                        >
+                          Read More
+                        </span>
+                      )}
                     {isExpanded && (
                       <span
                         className="read-more-link text-primary px-1"
@@ -208,6 +236,7 @@ const CourseDetails = () => {
                       </span>
                     )}
                   </p>
+
                   <h4 className="">
                     {" "}
                     What you will gain after completion of the course
@@ -239,20 +268,18 @@ const CourseDetails = () => {
                                   </div>
                                   <span className="CDlesson-duration">
                                     Duration:{" "}
-                                    {convertToReadableDuration(
-                                      calculateTotalDuration(lesson?.videos)
-                                    )}
+                                    {calculateTotalDuration(lesson?.chapter)}
                                   </span>
                                   <span className="">
                                     &nbsp;/&nbsp; Total Videos:{" "}
-                                    {lesson?.videos?.length}
+                                    {lesson?.chapter?.length}
                                   </span>
                                 </div>
                               </Accordion.Header>
                               <Accordion.Body>
                                 <div className="CDAccodrionBody">
                                   <ul className="list-group">
-                                    {lesson.videos?.map((video, vidIndex) => (
+                                    {lesson.chapter?.map((video, vidIndex) => (
                                       <li
                                         key={vidIndex}
                                         className="list-group-item"
@@ -263,9 +290,21 @@ const CourseDetails = () => {
                                             {video?.title}
                                           </a>
                                         </span>
-                                        <span className="CDlesson-duration">
+                                        {/* <span className="CDlesson-duration">
                                           Duration: {video?.duration}
-                                        </span>
+                                        </span> */}
+                                        {video?.type === "video" ? (
+                                          <span className="CDlesson-duration">
+                                            Duration :{" "}
+                                            {convertToReadableDuration(
+                                              video.duration
+                                            )}
+                                          </span>
+                                        ) : (
+                                          <span className="CDlesson-duration">
+                                            Type : {video?.type}
+                                          </span>
+                                        )}
                                       </li>
                                     ))}
                                   </ul>

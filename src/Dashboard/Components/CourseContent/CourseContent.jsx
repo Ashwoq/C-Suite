@@ -34,8 +34,9 @@ const CourseContent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
         const response = await axios.get(
-          `https://csuite-production.up.railway.app/api/courseDetail/${courseId}`
+          `${apiBaseUrl}/courseDetail/${courseId}`
         );
         setCourseData(response.data);
         // console.log(response.data.course);
@@ -64,8 +65,10 @@ const CourseContent = () => {
       if (!userId) return;
 
       try {
+        const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+
         const response = await axios.get(
-          `https://csuite-production.up.railway.app/api/completevideo/${userId}/${courseId}`
+          `${apiBaseUrl}/completevideo/${userId}/${courseId}`
         );
 
         const data = response.data.completedUserData;
@@ -80,7 +83,7 @@ const CourseContent = () => {
           const completedSet = new Set(
             firstItem.completedVideos.flatMap((videoTitle) =>
               courseData.lessons.flatMap((lesson, lessonIndex) =>
-                lesson.videos.flatMap((video, videoIndex) =>
+                lesson.chapter.flatMap((video, videoIndex) =>
                   video.title === videoTitle
                     ? [`${lessonIndex}-${videoIndex}`]
                     : []
@@ -89,13 +92,11 @@ const CourseContent = () => {
             )
           );
           setCompletedExercises(completedSet);
-
           setFetchedID(firstItem._id);
           setWatchedVideoTitles(completedTitles);
 
           console.log("Completed video titles:", completedTitles);
         } else {
-          // Handle the case where no completed videos are found
           console.log("No completed videos found.");
           setCompletedUserData([]);
           setWatchedVideoTitles([]);
@@ -104,26 +105,24 @@ const CourseContent = () => {
       } catch (err) {
         if (err.response) {
           if (err.response.status === 404) {
-            const message =
-              err.response.data.message ||
-              "No completed videos found. This might be normal.";
-            console.log(message);
+            // const message =
+            //   err.response.data.message ||
+            //   "No completed videos found. This might be normal.";
+            // console.log(message);
             setCompletedUserData([]);
             setWatchedVideoTitles([]);
             setCompletedExercises(new Set());
 
-            // Attempt to create a new entry with empty array
             try {
-              await axios.post(
-                "https://csuite-production.up.railway.app/api/completevideo/",
-                {
-                  userId,
-                  courseId,
-                  completedVideos: [], // Empty array
-                }
-              );
-              alert("posting in effect");
-              console.log("New entry created with empty completed videos.");
+              const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+
+              await axios.post(`${apiBaseUrl}/completevideo/`, {
+                userId,
+                courseId,
+                completedVideos: [],
+              });
+              // alert("posting in effect");
+              // console.log("New entry created with empty completed videos.");
             } catch (postErr) {
               console.error(
                 "Error creating new completed video entry:",
@@ -153,8 +152,10 @@ const CourseContent = () => {
   const calculateTotalDuration = (videos) => {
     let totalSeconds = 0;
     videos?.forEach((video) => {
-      const timeComponents = video.duration.split(":").map(Number);
-      totalSeconds += timeComponents[0] * 60 + timeComponents[1];
+      if (video.duration) {
+        const timeComponents = video.duration.split(":").map(Number);
+        totalSeconds += timeComponents[0] * 60 + timeComponents[1];
+      }
     });
 
     const hours = Math.floor(totalSeconds / 3600);
@@ -172,12 +173,11 @@ const CourseContent = () => {
   // currentcourse kkaaga ethu
   const handleCurrentContent = async (data, lessonIndex, excerciseIndex) => {
     const exerciseKey = `${lessonIndex}-${excerciseIndex}`;
-
     // Update completedExercises set
     setCompletedExercises((prev) => {
       const updatedSet = new Set(prev);
       updatedSet.add(exerciseKey);
-      console.log("Updated completedExercises:", Array.from(updatedSet));
+      // console.log("Updated completedExercises:", Array.from(updatedSet));
       return updatedSet;
     });
 
@@ -185,7 +185,7 @@ const CourseContent = () => {
     setWatchedVideoTitles((prevTitles) => {
       const updatedTitles = new Set(prevTitles);
       updatedTitles.add(data.title);
-      console.log("Updated watchedVideoTitles:", Array.from(updatedTitles));
+      // console.log("Updated watchedVideoTitles:", Array.from(updatedTitles));
       return Array.from(updatedTitles);
     });
 
@@ -194,7 +194,9 @@ const CourseContent = () => {
       ...data,
       excerciseNo: excerciseIndex + 1,
       lessonNo: lessonIndex + 1,
-      link: "https://www.youtube.com/embed/9DccPRe6-I8?autoplay=1&start=15",
+      type: data.type,
+      link: data.link,
+      duration: data.duration,
     };
     setCurrentCourseData(modifiedData);
 
@@ -203,20 +205,19 @@ const CourseContent = () => {
     setCurrentVideoIndex(excerciseIndex);
     setActiveAccordion(lessonIndex);
 
-    console.log("Updating completed videos with data:", {
-      lesson: data.title,
-    });
+    // console.log("Updating completed videos with data:", {
+    //   lesson: data.title,
+    // });
 
     try {
-      console.log(completedUserData);
       const videoAlreadyCompleted = completedUserData.includes(data.title);
 
-      console.log(completedUserData, videoAlreadyCompleted);
-
       if (!videoAlreadyCompleted) {
+        const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+
         // Video already completed, update if necessary
         await axios.put(
-          `https://csuite-production.up.railway.app/api/completevideo/${fetchedID}/updatelesson`,
+          `${apiBaseUrl}/completevideo/${fetchedID}/updatelesson`,
           { lesson: data.title }
         );
       }
@@ -230,19 +231,19 @@ const CourseContent = () => {
       const currentLesson = courseData.lessons[currentLessonIndex];
 
       if (currentLessonIndex === 0 && currentVideoIndex === -1) {
-        handleCurrentContent(currentLesson.videos[0], currentLessonIndex, 0);
-      } else if (currentVideoIndex < currentLesson.videos.length - 1) {
+        handleCurrentContent(currentLesson.chapter[0], currentLessonIndex, 0);
+      } else if (currentVideoIndex < currentLesson.chapter.length - 1) {
         handleCurrentContent(
-          currentLesson.videos[currentVideoIndex + 1],
+          currentLesson.chapter[currentVideoIndex + 1],
           currentLessonIndex,
           currentVideoIndex + 1
         );
       } else if (currentLessonIndex < courseData.lessons.length - 1) {
         const nextLesson = courseData.lessons[currentLessonIndex + 1];
-        handleCurrentContent(nextLesson.videos[0], currentLessonIndex + 1, 0);
+        handleCurrentContent(nextLesson.chapter[0], currentLessonIndex + 1, 0);
       } else {
         const totalExercises = courseData.lessons.reduce(
-          (total, lesson) => total + lesson.videos.length,
+          (total, lesson) => total + lesson.chapter.length,
           0
         );
         if (completedExercises.size === totalExercises) {
@@ -254,32 +255,23 @@ const CourseContent = () => {
     }
   };
 
-  const renderContent = (lesson, typeManual) => {
-    // if (lesson.type === "video") {
+  const renderContent = (link, typeManual) => {
+    // if (link.type === "video") {
     if (typeManual === "video") {
       return (
         <iframe
           title={
-            !currentCourseData.title
-              ? courseData.lessons[0].title
-              : currentCourseData.title
+            !currentCourseData.title ? "Video Title" : currentCourseData.title
           }
           className="embed-responsive-item"
-          src={
-            courseData.videoUrl !== undefined && courseData.videoUrl !== ""
-              ? courseData.videoUrl
-              : currentCourseData.link !== undefined &&
-                currentCourseData.link !== ""
-              ? currentCourseData.link
-              : "https://www.youtube.com/embed/9DccPRe6-I8?autoplay=1&start=15"
-          }
+          src={link}
           allow="autoplay"
           referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen
         ></iframe>
       );
     } else if (typeManual === "ppt") {
-      // const fileId = lesson.link.split("/d/")[1].split("/")[0];
+      // const fileId = link.split("/d/")[1].split("/")[0];
       const fileId =
         "https://drive.google.com/file/d/11LZ9bwWvJMaOfTe-AMFLcbsjQeehXJbc/view"
           .split("/d/")[1]
@@ -298,7 +290,7 @@ const CourseContent = () => {
 
   const calculateProgress = () => {
     const totalExercises = courseData.lessons?.reduce(
-      (total, lesson) => total + lesson.videos?.length,
+      (total, lesson) => total + lesson.chapter?.length,
       0
     );
     const progress =
@@ -339,9 +331,17 @@ const CourseContent = () => {
         <div className="col-md-8 pdy">
           <div className="videoBox">
             <div className="embed-responsive embed-responsive-16by9">
-              {courseData.lessons &&
-                courseData.lessons.length > 0 &&
-                renderContent(courseData.lessons[0], "video")}
+              {courseData?.lessons.length > 0 &&
+                renderContent(
+                  !currentCourseData.link
+                    ? courseData.videoUrl === "http://yourvideo.url"
+                      ? "https://www.youtube.com/embed/9WMqKhAcrpI?autoplay=1&start=0"
+                      : courseData.videoUrl
+                    : currentCourseData.link === "#"
+                    ? "https://www.youtube.com/embed/9DccPRe6-I8?autoplay=1&start=15"
+                    : currentCourseData.link,
+                  !currentCourseData.type ? "video" : currentCourseData.type
+                )}
             </div>
             <div>
               <div className="infoBox">
@@ -373,7 +373,7 @@ const CourseContent = () => {
           <Accordion activeKey={activeAccordion} onSelect={handleLessonClick}>
             {courseData?.lessons &&
               courseData.lessons?.map((lesson, index) => {
-                const lessonCompleted = lesson.videos?.every((_, vidIndex) =>
+                const lessonCompleted = lesson.chapter?.every((_, vidIndex) =>
                   completedExercises.has(`${index}-${vidIndex}`)
                 );
 
@@ -406,17 +406,17 @@ const CourseContent = () => {
                           )}
                         </div>
                         <span className="lesson-duration">
-                          Duration : {calculateTotalDuration(lesson?.videos)}
+                          Duration : {calculateTotalDuration(lesson?.chapter)}{" "}
+                          &nbsp; /&nbsp;
                         </span>
-                        <span>
-                          &nbsp; /&nbsp; Total Videos : {lesson.videos?.length}
-                        </span>
+
+                        <span>Total Videos : {lesson.chapter?.length}</span>
                       </div>
                     </Accordion.Header>
                     <Accordion.Body>
                       <div>
                         <ul className="list-group">
-                          {lesson.videos?.map((video, vidIndex) => (
+                          {lesson.chapter?.map((video, vidIndex) => (
                             <li
                               key={vidIndex}
                               className={`list-group-item 
@@ -447,10 +447,16 @@ const CourseContent = () => {
                                   />
                                 )}
                               </span>
-                              <span className="lesson-duration">
-                                Duration :{" "}
-                                {convertToReadableDuration(video.duration)}
-                              </span>
+                              {video?.type === "video" ? (
+                                <span className="lesson-duration">
+                                  Duration :{" "}
+                                  {convertToReadableDuration(video.duration)}
+                                </span>
+                              ) : (
+                                <span className="lesson-duration">
+                                  Type : {video?.type}
+                                </span>
+                              )}
                             </li>
                           ))}
                         </ul>

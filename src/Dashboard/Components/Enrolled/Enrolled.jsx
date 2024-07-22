@@ -19,9 +19,9 @@ const Enrolled = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const coursesResponse = await axios.get(
-          "https://csuite-production.up.railway.app/api/courseDetail"
-        );
+        const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+
+        const coursesResponse = await axios.get(`${apiBaseUrl}/courseDetail`);
 
         const allCourses = coursesResponse.data;
 
