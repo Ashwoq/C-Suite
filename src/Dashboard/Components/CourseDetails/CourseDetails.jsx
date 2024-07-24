@@ -121,7 +121,8 @@ const CourseDetails = () => {
                 className="embed-responsive-item"
                 src={
                   courseContentDetailsData?.videoUrl === "http://yourvideo.url"
-                    ? "https://www.youtube.com/embed/9DccPRe6-I8?autoplay=1&start=15"
+                    ? // ? "https://www.youtube.com/embed/9DccPRe6-I8?autoplay=1&start=15"
+                      "https://player.vimeo.com/video/988747921?title=0&byline=0&portrait=0&sidedock=0"
                     : courseContentDetailsData?.videoUrl
                 }
                 allow="autoplay"
@@ -145,7 +146,8 @@ const CourseDetails = () => {
                   src={
                     courseContentDetailsData?.videoUrl ===
                     "http://yourvideo.url"
-                      ? "https://www.youtube.com/embed/9WMqKhAcrpI?autoplay=1&start=0"
+                      ? // ? "https://www.youtube.com/embed/9WMqKhAcrpI?autoplay=1&start=0"
+                        "https://player.vimeo.com/video/988747921?title=0&byline=0&portrait=0&sidedock=0"
                       : courseContentDetailsData?.videoUrl
                   }
                   allow="autoplay"

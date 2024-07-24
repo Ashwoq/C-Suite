@@ -18,9 +18,31 @@ const Courses = () => {
     const fetchData = async () => {
       try {
         const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
-
         const response = await axios.get(`${apiBaseUrl}/courseDetail/`);
-        setCoursesData(response.data);
+        const allCourses = response.data;
+
+        // filtering purschased course
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        if (userInfo) {
+          const { coursePurchased } = userInfo;
+
+          // Checking course vangiyacha ?
+          if (coursePurchased.length > 0) {
+            // Filtering
+            const remainingCourses = allCourses.filter(
+              (course) => !coursePurchased.includes(course._id)
+            );
+
+            setCoursesData(remainingCourses);
+          } else {
+            setCoursesData(allCourses);
+          }
+        } else {
+          setFetchError(true);
+          alert("User not logged in, Go to Profile page");
+          console.log("No user info found in localStorage");
+        }
+
         setIsLoading(false);
       } catch (err) {
         console.log(err);

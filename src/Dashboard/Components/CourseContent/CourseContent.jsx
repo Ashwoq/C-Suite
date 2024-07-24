@@ -72,7 +72,7 @@ const CourseContent = () => {
         );
 
         const data = response.data.completedUserData;
-        console.log("Fetched data:", data[0].completedVideos);
+        // console.log("Fetched data:", data[0].completedVideos);
         setCompletedUserData(data[0].completedVideos);
 
         if (data.length > 0) {
@@ -95,7 +95,7 @@ const CourseContent = () => {
           setFetchedID(firstItem._id);
           setWatchedVideoTitles(completedTitles);
 
-          console.log("Completed video titles:", completedTitles);
+          // console.log("Completed video titles:", completedTitles);
         } else {
           console.log("No completed videos found.");
           setCompletedUserData([]);
@@ -335,10 +335,12 @@ const CourseContent = () => {
                 renderContent(
                   !currentCourseData.link
                     ? courseData.videoUrl === "http://yourvideo.url"
-                      ? "https://www.youtube.com/embed/9WMqKhAcrpI?autoplay=1&start=0"
-                      : courseData.videoUrl
+                      ? "https://player.vimeo.com/video/988747921?title=0&byline=0&portrait=0&sidedock=0"
+                      : // ? "https://www.youtube.com/embed/9WMqKhAcrpI?autoplay=1&start=0"
+                        courseData.videoUrl
                     : currentCourseData.link === "#"
-                    ? "https://www.youtube.com/embed/9DccPRe6-I8?autoplay=1&start=15"
+                    ? // ? "https://www.youtube.com/embed/9DccPRe6-I8?autoplay=1&start=15"
+                      "https://player.vimeo.com/video/988747921?title=0&byline=0&portrait=0&sidedock=0"
                     : currentCourseData.link,
                   !currentCourseData.type ? "video" : currentCourseData.type
                 )}

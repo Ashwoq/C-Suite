@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Home.css";
 import axios from "axios";
-
 import TopBar from "../TopBar/TopBar";
 import Header from "../Header/Header";
 import CustomCalendar from "../Calendar/Calendar";
@@ -41,28 +40,27 @@ function Home() {
   );
 
   return (
-    <>
-      <div className="main-content">
-        <TopBar />
-        <div className="header-part">
-          <Header />
-          <CustomCalendar />
-        </div>
-        <Statistics />
+    <div className="mainContent">
+      <TopBar />
+      <div className="headerPart">
+        <Header />
+        <CustomCalendar />
       </div>
+      <Statistics />
       <div className="home-courseBox">
-        <h4>Recommended Courses</h4>
+        <h3>Recommended Courses</h3>
         <div className="home-course">
-          {shuffledCourses.slice(0, 5).map((course, index) => (
+          {shuffledCourses.slice(0, 7).map((course, index) => (
             <CourseRecommendation
               key={index}
               title={course.title}
               courseId={course._id}
+              imgName={course.image}
             />
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

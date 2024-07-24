@@ -1,5 +1,6 @@
 .cr-card {
   width: 200px;
+  min-width: 200px;
   border-radius: 15px;
   margin-bottom: 20px;
   background-color: rgba(128, 128, 128, 0.529);
@@ -92,6 +93,11 @@
 }
 
 @media (max-width: 1125px) {
+  .cr-card {
+    width: 150px;
+    min-width: 150px;
+  }
+
   .cr-button {
     padding: 4px;
   }
@@ -103,8 +109,13 @@
   .cr-title {
     top: 55%;
     right: 0%;
-    font-size: 1em;
+    font-size: 0.65em;
     padding: 4% 3%;
     /* line-height: 2em; */
+  }
+
+  .cr-button {
+    font-size: 0.6em;
+    padding: 6px 10px;
   }
 }

@@ -29,8 +29,8 @@ const Chart = ({ data }) => {
                 { name: "Not Started", value: data.notStarted },
               ]}
               cx="50%"
-              cy="50%"
-              outerRadius={80}
+              cy="55%"
+              outerRadius={110}
               fill="#82ca9d"
               label
             >
