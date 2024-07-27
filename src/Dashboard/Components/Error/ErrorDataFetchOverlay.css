@@ -11,7 +11,7 @@
 
 .error-message {
   font-size: 1.5em;
-  color: #d9534f; /* Bootstrap's danger color */
+  color: #d9534f;
   margin-bottom: 20px;
 }
 
@@ -25,7 +25,7 @@
   padding: 10px 20px;
   font-size: 1em;
   color: #fff;
-  background-color: #5bc0de; /* Bootstrap's info color */
+  background-color: #5bc0de;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -34,10 +34,10 @@
 
 .error-button:hover,
 .reload-button:hover {
-  background-color: #31b0d5; /* Bootstrap's info hover color */
+  background-color: #31b0d5;
 }
 
-@media (max-width: 1125px) {
+@media (max-width: 835px) {
   .error-message {
     font-size: 1.2em;
   }

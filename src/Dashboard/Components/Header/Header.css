@@ -1,9 +1,8 @@
-/* src/components/Header.css */
 .header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   width: 60%;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .welcome-message h1 {
@@ -23,8 +22,8 @@
 .header {
   flex: 1;
   background-image: url("../Assets/Images/welcomebg.jpg");
-  background-size: cover; /* Ensures the image covers the whole background */
-  background-position: center; /* Centers the image */
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
   padding: 20px;
   border-radius: 10px;
@@ -61,25 +60,42 @@
 }
 
 @media (max-width: 1125px) {
+  .welcome-message h1 {
+    font-size: 1.6rem;
+  }
+
+  .welcome-message p {
+    margin: 8px 0px;
+    font-size: 0.8rem;
+  }
+
+  .welcome-message button {
+    padding: 10px 15px;
+    border-radius: 7px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 835px) {
   .header {
     width: 100%;
     padding: 10px;
   }
 
   .welcome-message h1 {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 
   .welcome-message p {
-    width: 85%;
+    width: 80%;
     margin: 8px 0px;
-    font-size: 0.65rem;
+    font-size: 0.6rem;
   }
 
   .welcome-message button {
     padding: 5px 10px;
     border-radius: 7px;
     margin-top: 3px;
-    font-size: 0.65rem;
+    font-size: 0.6rem;
   }
 }

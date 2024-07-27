@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 function Dashboard() {
   return (
-    <div className="Dashboard">
+    <div className="dashboard">
       <div className="sidebarBox">
         <Sidebar />
       </div>

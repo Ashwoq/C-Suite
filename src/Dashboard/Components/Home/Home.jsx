@@ -7,22 +7,48 @@ import CustomCalendar from "../Calendar/Calendar";
 import Statistics from "../Statistics/Statistics";
 import LoadingPage from "../LoadingPage/LoadingPage";
 import CourseRecommendation from "../CourseRecomend/CourseRecommendation";
+import ErrorDataFetchOverlay from "../Error/ErrorDataFetchOverlay";
 
 function Home() {
   const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
   const [recommendedCourses, setRecommendedCourses] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "https://csuite-production.up.railway.app/api/courseDetail"
-        );
+        const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+        const response = await axios.get(`${apiBaseUrl}/courseDetail`);
         const courses = response.data;
-        setRecommendedCourses(courses);
+
+        //
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        if (userInfo) {
+          const { coursePurchased } = userInfo;
+
+          // Checking course vangiyacha ?
+          // if (coursePurchased.length === 0) {
+          //   setHasPurchasedCourses(false);
+          // }
+
+          // Filtering
+          // const filteredCourses = courses.filter((course) =>
+          //   coursePurchased.includes(course._id)
+          // );
+          const filteredCourses = courses.filter(
+            (course) => !coursePurchased.includes(course._id)
+          );
+          setRecommendedCourses(filteredCourses);
+        } else {
+          setFetchError(true);
+          alert("User not logged in, Go to Profile page");
+          console.log("No user info found in localStorage");
+        }
+        // setRecommendedCourses(courses);
         setIsLoading(false);
       } catch (err) {
         console.error("Error fetching course details:", err);
+        setFetchError(true);
         setIsLoading(false);
       }
     };
@@ -30,14 +56,18 @@ function Home() {
     fetchData();
   }, []);
 
-  if (isLoading) {
-    return <LoadingPage />;
-  }
-
   // Shuffle recommended courses
   const shuffledCourses = [...recommendedCourses].sort(
     () => 0.5 - Math.random()
   );
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
+
+  if (fetchError) {
+    return <ErrorDataFetchOverlay />;
+  }
 
   return (
     <div className="mainContent">

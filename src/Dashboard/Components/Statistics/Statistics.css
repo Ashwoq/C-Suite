@@ -1,25 +1,17 @@
-/* src/components/Statistics.css */
 .statistics {
   display: flex;
   gap: 20px;
   width: 100%;
 }
 
-/* .content-area {
-  display: flex;
-  gap: 20px;
-  flex: 1;
-} */
-
 .time-spent,
 .completion {
-  background-color: #fff;
+  width: 50%;
   padding: 10px 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  /* flex: 1; */
-  width: 50%;
+  background-color: #fff;
   transition: transform 0.3s ease-in-out;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .time-spent:hover,
@@ -127,6 +119,25 @@
 }
 
 @media (max-width: 1125px) {
+  .time-spent,
+  .completion {
+    padding: 5px 10px;
+  }
+
+  .chart-legend {
+    display: none;
+  }
+
+  .recharts-cartesian-axis-tick-value tspan {
+    font-size: 13px;
+  }
+
+  .recharts-legend-item-text {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 835px) {
   .statistics {
     flex-direction: column;
   }
@@ -156,5 +167,9 @@
   .time-spent h3,
   .completion h3 {
     font-size: 1em;
+  }
+
+  .recharts-wrapper {
+    max-width: 250px !important;
   }
 }

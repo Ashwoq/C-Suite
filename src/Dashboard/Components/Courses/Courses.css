@@ -200,57 +200,12 @@
 
 @media (max-width: 1125px) {
   .main-content {
-    padding: 0px 5px 5px 5px;
-  }
-
-  .cardContainer3 h2,
-  .cardContainer3 h3 {
-    padding: 5px;
-    font-size: large;
-    margin-bottom: 10px;
-  }
-
-  .cardContainer3 h3 {
-    font-size: medium;
-  }
-
-  .courseLessonBox3 h5 {
-    font-size: medium;
-    font-weight: 400;
-  }
-
-  .courseLessonBox3 ul {
-    padding: 0px 5px 0px 10px;
-    font-size: 0.7em;
+    padding: 0px 10px 10px 10px;
   }
 
   .courseContainer3 {
-    gap: 20px;
+    gap: 30px;
     grid-template-columns: repeat(3, 1fr);
-  }
-
-  .courseImage3 {
-    height: 150px;
-  }
-
-  .courseImageTxt3 {
-    font-size: x-small;
-  }
-
-  .courseDetails3 p {
-    font-size: 0.7em;
-  }
-
-  .courseDetailBtn3,
-  .lessonDetailBtn3 {
-    padding: 8px 10px;
-    font-size: 0.7em;
-  }
-
-  .filterChip,
-  .clearFilters {
-    padding: 4px 8px;
-    font-size: 12px;
   }
 }
 
@@ -258,8 +213,74 @@
   .cardContainer3 {
     padding: 8px 2px;
   }
+
+  .courseCard3 {
+    padding: 6px;
+  }
+
+  .cardContainer3 h2 {
+    padding: 5px;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+  }
+
+  .courseLessonBox3 {
+    padding: 15px;
+  }
+
+  .courseLessonBox3 h5 {
+    font-size: 0.6em;
+    font-weight: 400;
+    padding: 4px 6px;
+    border-radius: 5px;
+  }
+
+  .courseLessonBox3 ul {
+    font-size: 0.5em;
+    padding: 0px 1px 0px 5px;
+  }
+
   .courseContainer3 {
-    gap: 10px;
+    gap: 20px;
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .courseImage3 {
+    height: 110px;
+  }
+
+  .courseImageTxt3 {
+    padding: 2% 4%;
+    font-size: 0.55em;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  .courseDetails3 {
+    padding: 5px 0;
+    /* min-height: 55%; */
+  }
+
+  .courseDetails3 p {
+    padding: 0%;
+    font-size: 0.5em;
+    margin: 3px 0 8px 3px;
+  }
+
+  .courseDetailBtn3,
+  .lessonDetailBtn3 {
+    padding: 6px 8px;
+    font-size: 0.5em;
+  }
+
+  .filterChip,
+  .clearFilters {
+    font-size: 8px;
+    padding: 4px 6px;
+  }
+
+  .filterChips {
+    gap: 5px;
+    margin-bottom: 10px;
   }
 }

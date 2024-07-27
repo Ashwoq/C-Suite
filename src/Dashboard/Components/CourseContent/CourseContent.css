@@ -4,9 +4,10 @@
   padding: 20px;
   cursor: default;
   overflow: hidden;
+  min-height: 100vh;
   align-items: center;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   background-color: var(--primary-bg);
 }
 
@@ -358,18 +359,76 @@ COMPLETED LESSON CSS DA ETHU REMOVE PANATHA LATER USE AAGUM
 }
 
 @media (max-width: 1125px) {
+  .courseHeading {
+    margin: 0 6px;
+  }
+
+  .CCaccordianBox .accordion-body {
+    font-size: 0.9em;
+  }
+
+  .testButtonBox {
+    font-size: 0.95em;
+  }
+
+  .testButtonBox div div {
+    font-size: 0.85em;
+  }
+
+  .testButton {
+    font-size: 0.85em;
+  }
+
+  .lesson-title {
+    font-size: 0.85em;
+  }
+
+  .lesson-meta .lesson-duration,
+  .list-group-item .lesson-duration {
+    font-size: 0.7em;
+    padding: 0 0 0 10px;
+  }
+
+  .lesson-meta span {
+    font-size: 0.7em;
+  }
+
+  .accordion-body .lesson-duration {
+    font-size: 0.8em;
+  }
+
+  .content-watched {
+    width: 14px;
+  }
+
+  .lesson-meta {
+    padding-left: 0px;
+  }
+}
+
+@media (max-width: 835px) {
   .courseContentContainer {
     padding: 13px 15px;
   }
 
+  .content-watched {
+    width: 12px;
+  }
+
   .firstRow {
+    gap: 5px;
     padding: 13px 7px;
+    margin-bottom: 10px;
   }
 
   .courseHeading {
-    margin: 0 2px;
-    font-size: 0.95em;
-    line-height: 1.15em;
+    margin: 0 4px;
+    font-size: 0.8em;
+    line-height: 1.18em;
+  }
+
+  .videoBox iframe {
+    border-radius: 10px;
   }
 
   .BackBtn,
@@ -377,9 +436,15 @@ COMPLETED LESSON CSS DA ETHU REMOVE PANATHA LATER USE AAGUM
     flex: 1;
     margin: 0;
     font-size: 0.5em;
-    line-height: 1em;
     padding: 7px 10px;
-    border-radius: 7px;
+    padding-left: 4px;
+    line-height: 0.6em;
+    border-radius: 3px;
+  }
+
+  .BackBtn::before,
+  .NextBtn::before {
+    border-radius: 3px;
   }
 
   .pdy .videoBox {
@@ -412,24 +477,25 @@ COMPLETED LESSON CSS DA ETHU REMOVE PANATHA LATER USE AAGUM
   }
 
   .infoBox {
-    padding: 10px 12px;
+    padding: 8px 10px;
   }
 
   .infoBox h1 {
-    font-size: 0.9em;
+    font-size: 0.8em;
   }
 
   .lessonDescriptionBox {
-    padding: 11px;
+    padding: 8px;
   }
 
   .lessonDescriptionBoxTitle {
-    font-size: 13px;
+    font-size: 0.7em;
+    margin-bottom: 3px;
   }
 
   .lessonDescriptionBoxDescription {
-    font-size: 12px;
-    line-height: 17px;
+    font-size: 0.65em;
+    line-height: 14px;
   }
 
   .CCaccordianBox {
@@ -447,7 +513,7 @@ COMPLETED LESSON CSS DA ETHU REMOVE PANATHA LATER USE AAGUM
 
   .CCaccordianBox .accordion-body {
     padding: 5px;
-    font-size: 0.8em;
+    font-size: 0.65em;
     padding-left: 35px;
   }
 
@@ -461,17 +527,21 @@ COMPLETED LESSON CSS DA ETHU REMOVE PANATHA LATER USE AAGUM
   }
 
   .lesson-title {
-    font-size: 0.75em;
+    font-size: 0.65em;
     margin-bottom: 0px;
   }
 
   .lesson-meta .lesson-duration,
   .list-group-item .lesson-duration {
-    font-size: 0.7em;
+    font-size: 0.6em;
     padding: 0 0 0 10px;
   }
 
   .lesson-meta span {
+    font-size: 0.6em;
+  }
+
+  .accordion-body .lesson-duration {
     font-size: 0.7em;
   }
 

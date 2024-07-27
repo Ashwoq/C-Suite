@@ -1,6 +1,7 @@
 .profileContainer {
   display: flex;
   cursor: default;
+  min-height: 100vh;
   padding: 40px 50px;
   align-items: center;
   flex-direction: column;
@@ -144,6 +145,7 @@
   font-size: 0.9em;
   font-weight: 500;
   text-align: right;
+  padding-right: 5px;
   border-radius: 5px;
   /* background-color: transparent; */
   background-color: rgba(220, 220, 220, 0.41);
@@ -228,6 +230,22 @@
 }
 
 @media (max-width: 1125px) {
+  .profileContainer {
+    min-height: 100vh;
+    padding: 20px 30px;
+    justify-content: flex-start;
+  }
+
+  .profileBGBox img {
+    height: 210px;
+  }
+
+  .profileSection {
+    width: 45%;
+  }
+}
+
+@media (max-width: 835px) {
   .profileContainer {
     height: auto;
     padding: 12px 18px;

@@ -280,9 +280,24 @@ const CourseContent = () => {
       return (
         <iframe
           title="PPT"
+          sandbox="allow-same-origin allow-scripts"
           className="embed-responsive-item"
           src={embedUrl}
           allowFullScreen
+        ></iframe>
+      );
+    } else if (typeManual === "audio") {
+      // const Nlink =
+      //   "https://drive.google.com/file/d/1o5fqu02l3u6vGVCC6BEhe4XZ9trfqVr7/view?usp=sharing";
+      // const audioURL = Nlink.split("/d/")[1].split("/")[0];
+      // const embedUrl = `https://drive.google.com/uc?export=download&id=${audioURL}`;
+      return (
+        <iframe
+          title="audio"
+          src="https://drive.google.com/file/d/1CqdN4fSdXF4pMFEzjcMH6dkxsrfqt5Oq/preview"
+          width="640"
+          height="480"
+          allow="autoplay"
         ></iframe>
       );
     }
@@ -297,6 +312,13 @@ const CourseContent = () => {
       totalExercises > 0 ? (completedExercises.size / totalExercises) * 100 : 0;
 
     return progress;
+  };
+
+  const truncateText = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + "...";
+    }
+    return text;
   };
 
   if (isLoading) {
@@ -318,7 +340,9 @@ const CourseContent = () => {
           <button className="BackBtn" onClick={() => navigate(-1)}>
             Back
           </button>
-          <div className="courseHeading">{courseData.title}</div>
+          <div className="courseHeading">
+            {truncateText(courseData.title, 45)}
+          </div>
           <button className="NextBtn" onClick={() => handleNext()}>
             Next
           </button>
@@ -336,13 +360,12 @@ const CourseContent = () => {
                   !currentCourseData.link
                     ? courseData.videoUrl === "http://yourvideo.url"
                       ? "https://player.vimeo.com/video/988747921?title=0&byline=0&portrait=0&sidedock=0"
-                      : // ? "https://www.youtube.com/embed/9WMqKhAcrpI?autoplay=1&start=0"
-                        courseData.videoUrl
+                      : courseData.videoUrl
                     : currentCourseData.link === "#"
-                    ? // ? "https://www.youtube.com/embed/9DccPRe6-I8?autoplay=1&start=15"
-                      "https://player.vimeo.com/video/988747921?title=0&byline=0&portrait=0&sidedock=0"
+                    ? "https://player.vimeo.com/video/988747921?title=0&byline=0&portrait=0&sidedock=0"
                     : currentCourseData.link,
-                  !currentCourseData.type ? "video" : currentCourseData.type
+                  // !currentCourseData.type ? "video" : "audio"
+                  currentCourseData.type ? currentCourseData.type : "video"
                 )}
             </div>
             <div>

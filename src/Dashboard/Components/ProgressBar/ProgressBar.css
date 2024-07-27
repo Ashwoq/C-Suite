@@ -34,13 +34,13 @@
   transition: color 0.3s ease-in-out;
 }
 
-@media (max-width: 1125px) {
+@media (max-width: 835px) {
   .progressBarBoxOuter {
     height: 20px;
     border-radius: 6px;
   }
   .progressBarBoxInner span {
     font-weight: 500;
-    font-size: 0.7em;
+    font-size: 0.6em;
   }
 }

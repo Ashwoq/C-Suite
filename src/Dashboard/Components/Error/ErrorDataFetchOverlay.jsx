@@ -20,7 +20,7 @@ const ErrorDataFetchOverlay = () => {
   return (
     <div className="error-overlay">
       <div className="error-message">
-        Unable to fetch data from the backend. Kindly contact the admin.
+        Unable to fetch data from the seerver. Kindly contact the admin.
       </div>
       <div className="button-group">
         <button className="error-button" onClick={handleRedirect}>

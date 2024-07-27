@@ -55,7 +55,7 @@ function Header() {
               <Link className="nav-link text-light">Why C-Suite</Link>
             </li>
             <li className="nav-item active ml-4">
-              <Link to="/home/" className="nav-link text-light">
+              <Link to="/home/profile" className="nav-link text-light">
                 Resources
               </Link>
             </li>

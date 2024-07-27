@@ -3,7 +3,7 @@
   min-width: 200px;
   border-radius: 15px;
   margin-bottom: 20px;
-  background-color: rgba(128, 128, 128, 0.529);
+  background-color: rgb(211, 210, 210);
   box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.1);
 }
 
@@ -40,7 +40,6 @@
 
 .cr-content {
   padding: 0 8px;
-  background-color: red;
 }
 
 .cr-description {
@@ -48,7 +47,6 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  background-color: rgb(17, 0, 255);
 }
 
 .cr-button {
@@ -98,8 +96,27 @@
     min-width: 150px;
   }
 
+  .cr-image {
+    height: 130px;
+  }
+
+  .cr-title {
+    top: 55%;
+    right: 0%;
+    padding: 4% 3%;
+    font-size: 0.7em;
+  }
+
   .cr-button {
-    padding: 4px;
+    font-size: 0.7em;
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 835px) {
+  .cr-card {
+    width: 150px;
+    min-width: 150px;
   }
 
   .cr-image {
@@ -109,9 +126,8 @@
   .cr-title {
     top: 55%;
     right: 0%;
-    font-size: 0.65em;
     padding: 4% 3%;
-    /* line-height: 2em; */
+    font-size: 0.65em;
   }
 
   .cr-button {

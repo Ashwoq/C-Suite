@@ -99,6 +99,27 @@ const Courses = () => {
     }
   }, [coursesData]);
 
+  const getLessonList = (lessons) => {
+    const MAX_WORD_COUNT = 20;
+    let totalWords = 0;
+    let lessonList = [];
+
+    for (let i = 0; i < lessons.length && i < 3; i++) {
+      const lesson = lessons[i];
+      if (!lesson.title) continue;
+      const wordCount = lesson.title.split(" ").length;
+
+      if (totalWords + wordCount > MAX_WORD_COUNT) {
+        break;
+      }
+
+      totalWords += wordCount;
+      lessonList.push(lesson);
+    }
+
+    return lessonList;
+  };
+
   const filterCourses = (filters) => {
     try {
       if (filters.length === 0) {
@@ -187,11 +208,20 @@ const Courses = () => {
                 </div>
                 <div className="courseLessonBox3">
                   <h5>Lessons</h5>
-                  <ul>
+                  {/* <ul>
                     {course.lessons.slice(0, 3).map((lesson, index) => (
                       <li key={index}>{lesson.title}</li>
                     ))}
                     {course.lessons.length > 3 && <li>...and more</li>}
+                  </ul> */}
+                  <ul>
+                    {getLessonList(course.lessons).map((lesson, index) => (
+                      <li key={index}>{lesson.title}</li>
+                    ))}
+                    {course.lessons.length >
+                      getLessonList(course.lessons).length && (
+                      <li>...and more</li>
+                    )}
                   </ul>
                   <button
                     onClick={() =>

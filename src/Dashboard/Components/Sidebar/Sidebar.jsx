@@ -15,7 +15,15 @@ import {
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 
-function SidebarItem({ icon, text, active, expanded, path, splMargin }) {
+function SidebarItem({
+  icon,
+  text,
+  active,
+  expanded,
+  path,
+  splMargin,
+  loggedOut,
+}) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -34,9 +42,9 @@ function SidebarItem({ icon, text, active, expanded, path, splMargin }) {
     marginLeft: expanded
       ? ""
       : windowWidth <= 1125 && !splMargin
-      ? "4px"
+      ? "7px"
       : windowWidth <= 1125 && splMargin
-      ? "2px"
+      ? "5px"
       : splMargin
       ? "6.25px"
       : "8.25px",
@@ -50,6 +58,11 @@ function SidebarItem({ icon, text, active, expanded, path, splMargin }) {
         expanded ? "expanded" : "collapsed"
       }`}
       end={true}
+      onClick={() =>
+        loggedOut
+          ? alert("not logged out but function triggered, edit in sidebar.jsx")
+          : ""
+      }
     >
       <FontAwesomeIcon icon={icon} className="icon" style={iconStyle} />
       <span
@@ -92,6 +105,10 @@ const Sidebar = () => {
     flex: expanded ? 1 : "",
   };
 
+  const collapsedShortMobileLogo = {
+    marginLeft: expanded ? "" : windowWidth <= 835 ? "10px" : "0px",
+  };
+
   return (
     <>
       <aside className={`sidebar ${expanded ? "expanded" : "collapsed"}`}>
@@ -100,6 +117,7 @@ const Sidebar = () => {
             <img
               src={expanded ? logoShort : logoShort}
               className={expanded ? "logo-short" : "logo-short"}
+              style={collapsedShortMobileLogo}
               alt="Logo"
             />
             <img
@@ -119,8 +137,13 @@ const Sidebar = () => {
             >
               <FontAwesomeIcon
                 icon={expanded ? faChevronLeft : faBars}
+                style={
+                  (iconStyle,
+                  {
+                    marginLeft: expanded ? "" : "7px",
+                  })
+                }
                 className="icon"
-                style={iconStyle}
               />
               <span
                 className="item-text"
@@ -172,6 +195,7 @@ const Sidebar = () => {
               path={"./logout"}
               text={"Logout"}
               expanded={expanded}
+              loggedOut={true}
             />
           </div>
         </nav>
